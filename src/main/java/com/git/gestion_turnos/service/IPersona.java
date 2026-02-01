@@ -10,4 +10,5 @@ public interface IPersona {
     List<Persona> findAll();
     Persona findById(Integer id);
     void deleteById(Integer id);
+    Persona update(Persona persona);
 }

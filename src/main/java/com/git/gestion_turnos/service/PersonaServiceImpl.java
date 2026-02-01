@@ -47,4 +47,14 @@ public class PersonaServiceImpl implements IPersona{
         personaRepository.deleteById(id);
     }
 
+    @Override
+    public Persona update(Persona persona) {
+        Persona personaBD = personaRepository.findById(persona.getId()).get();
+
+        personaBD.setNombre(persona.getNombre());
+        personaBD.setTelefono(persona.getTelefono());
+
+        return personaRepository.save(personaBD);
+    }
+
 }
