@@ -1,5 +1,6 @@
 package com.git.gestion_turnos.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -33,18 +34,53 @@ public class PersonaServiceImpl implements IPersona{
     }
 
     @Override
-    public List<Persona> findAll() {
-        return personaRepository.findAll();
+    public List<PersonaDTO> findAll() {
+        List<Persona> personas = personaRepository.findAll();
+        List<PersonaDTO> dtos = new ArrayList<>();
+
+        for(Persona p : personas){
+            PersonaDTO pdto = new PersonaDTO();
+            pdto.setId(p.getId());
+            pdto.setNombre(p.getNombre());
+            pdto.setTelefono(p.getTelefono());
+            dtos.add(pdto);
+        }
+
+        return dtos;
     }
 
     @Override
-    public Persona findById(Integer id) {
-        return personaRepository.findById(id).get();
+    public PersonaDTO findById(Integer id) {
+        PersonaDTO personaDTO = new PersonaDTO();
+       Persona persona = personaRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+        personaDTO.setId(persona.getId());
+        personaDTO.setNombre(persona.getNombre());
+        personaDTO.setTelefono(persona.getTelefono());
+        return personaDTO;
     }
 
     @Override
     public void deleteById(Integer id) {
         personaRepository.deleteById(id);
+    }
+
+    @Override
+    public PersonaDTO update(Integer id, PersonaDTO dto) {
+        Persona personaBD = personaRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+
+        personaBD.setNombre(dto.getNombre());
+        personaBD.setTelefono(dto.getTelefono());
+
+        Persona guardada = personaRepository.save(personaBD);
+
+        PersonaDTO response = new PersonaDTO();
+        response.setId(guardada.getId());
+        response.setNombre(guardada.getNombre());
+        response.setTelefono(guardada.getTelefono());
+
+        return response;
     }
 
 }
