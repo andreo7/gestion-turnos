@@ -14,6 +14,7 @@ public class PersonaServiceImpl implements IPersona{
 
     private PersonaRepository personaRepository;
 
+    //Se inyecta por constructor el bean que el service necesita para funcionar.
     public PersonaServiceImpl(PersonaRepository personaRepository){
         this.personaRepository = personaRepository;
     }
