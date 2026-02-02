@@ -8,11 +8,16 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class TurnoDTO {
+    private Integer id;
     private LocalDate fecha;
     private LocalTime hora;
     private EstadoTurno estado;
 
     public TurnoDTO(){}
+
+    public Integer getId() { return id; }
+
+    public void setId(Integer id) { this.id = id;}
 
     public LocalDate getFecha() {
         return fecha;

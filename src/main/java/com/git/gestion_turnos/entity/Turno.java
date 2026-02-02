@@ -14,6 +14,17 @@ public class Turno {
     private LocalTime hora;
     @Enumerated(EnumType.STRING)
     private EstadoTurno estado;
+    @ManyToOne
+    @JoinColumn(name = "persona_id")
+    private Persona persona;
+
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
 
     public Turno(){}
 

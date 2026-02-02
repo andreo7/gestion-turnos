@@ -4,5 +4,5 @@ import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.dto.TurnoDTO;
 
 public interface ITurno {
-    TurnoDTO crear(TurnoDTO dto);
+    void crearTurnosEnUnMes(int anio, int mes);
 }
