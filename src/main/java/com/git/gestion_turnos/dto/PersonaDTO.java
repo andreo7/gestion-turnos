@@ -1,9 +1,23 @@
 package com.git.gestion_turnos.dto;
 
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class PersonaDTO {
     
     private Integer id;
+
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(min = 2, max = 50)
     private String nombre;
+
+    @NotBlank(message = "El teléfono es obligatorio")
+    @Pattern(
+            regexp = "^[0-9+ ]{6,20}$",
+            message = "Teléfono inválido"
+    )
     private String telefono;
 
     public PersonaDTO(){
