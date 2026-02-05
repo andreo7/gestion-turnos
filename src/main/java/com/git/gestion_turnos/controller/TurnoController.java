@@ -14,7 +14,7 @@ public class TurnoController {
         this.iturno = iturno;
     }
 
-    @PostMapping //Endpoint utilizado para generar los turnos del primer mes. El resto se genera con el disparador shedule
+    @PostMapping //Endpoint utilizado para generar los turnos del primer mes (solo uso de admin. El resto se genera con el disparador shedule
     public void crearTurnos(@RequestParam int anio, @RequestParam int mes){
         iturno.crearTurnosEnUnMes(anio, mes);
     }
