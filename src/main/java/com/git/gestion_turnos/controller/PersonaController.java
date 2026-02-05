@@ -2,6 +2,7 @@ package com.git.gestion_turnos.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +28,7 @@ public class PersonaController {
     //POST
     //http:localhost:8080/personas
     @PostMapping
-    public PersonaDTO save(@RequestBody PersonaDTO persona){
+    public PersonaDTO save(@Valid @RequestBody PersonaDTO persona){
         return iPersona.save(persona);
     }
 
@@ -56,7 +57,7 @@ public class PersonaController {
     //htpp://localhost:8080/personas
     @PutMapping("/{id}")
     public PersonaDTO update(@PathVariable Integer id,
-                             @RequestBody PersonaDTO persona){
+                             @Valid @RequestBody PersonaDTO persona){
         return iPersona.update(id,persona);
     }    
 }
