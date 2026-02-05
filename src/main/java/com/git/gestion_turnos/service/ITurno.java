@@ -5,4 +5,5 @@ import com.git.gestion_turnos.dto.TurnoDTO;
 
 public interface ITurno {
     void crearTurnosEnUnMes(int anio, int mes);
+    void generarTurnosMesSiguiente();
 }

@@ -7,13 +7,20 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "uk_fecha",
+                          columnNames = {"fecha, hora"}
+        )
+})
 public class Turno {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private LocalDate fecha;
     private LocalTime hora;
+
     @Enumerated(EnumType.STRING)
     private EstadoTurno estado;
+
     @ManyToOne
     @JoinColumn(name = "persona_id")
     private Persona persona;

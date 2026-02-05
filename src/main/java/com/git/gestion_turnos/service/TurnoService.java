@@ -1,11 +1,9 @@
 package com.git.gestion_turnos.service;
 
-import com.git.gestion_turnos.dto.TurnoDTO;
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.EstadoTurno;
 import com.git.gestion_turnos.repository.TurnoRepository;
-import jakarta.annotation.PostConstruct;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -15,15 +13,24 @@ import java.time.YearMonth;
 
 @Service
 public class TurnoService implements ITurno{
-    private TurnoRepository turnoRepository;
+    private final TurnoRepository turnoRepository;
     private static final LocalTime HORA_INICIO = LocalTime.of(8, 0);
     private static final LocalTime HORA_FIN = LocalTime.of(16, 0);
     private static final int DURACION_TURNO = 30;
 
 
-
     public TurnoService(TurnoRepository turnoRepository){
         this.turnoRepository = turnoRepository; //Inyecto el repositorio.
+    }
+
+    //Genera los turnos del mes siguiente al actual solo si no existen turnos ya creados.
+    public void generarTurnosMesSiguiente(){
+        LocalDate hoy = LocalDate.now();
+        LocalDate siguienteMes = hoy.plusMonths(1);
+
+        if(turnoRepository.existenTurnosEnMes(siguienteMes.getYear(), siguienteMes.getMonth().getValue()).isEmpty()) {
+            crearTurnosEnUnMes(siguienteMes.getYear(), siguienteMes.getMonth().getValue());
+        }
     }
 
     public void crearTurnosEnUnMes(int anio, int mes){
