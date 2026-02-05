@@ -1,13 +1,11 @@
 package com.git.gestion_turnos.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "personas")
+@Table(name = "personas", uniqueConstraints =
+                        {@UniqueConstraint(
+                                name = "uk_nombre_telefono", columnNames = {"nombre, telefono"})})
 public class Persona {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,8 +1,11 @@
 package com.git.gestion_turnos.controller;
 
+import com.git.gestion_turnos.dto.PersonaDTO;
 import com.git.gestion_turnos.dto.TurnoDTO;
 import com.git.gestion_turnos.service.ITurno;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/turnos")
@@ -17,5 +20,20 @@ public class TurnoController {
     @PostMapping //Endpoint utilizado para generar los turnos del primer mes (solo uso de admin. El resto se genera con el disparador shedule
     public void crearTurnos(@RequestParam int anio, @RequestParam int mes){
         iturno.crearTurnosEnUnMes(anio, mes);
+    }
+
+    @GetMapping //Devuelve todos los turnos
+    public List<TurnoDTO> findAll(){
+        return iturno.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public TurnoDTO findById(@PathVariable Integer id){
+        return iturno.findById(id);
+    }
+
+    @PatchMapping("/{idTurno}")
+    public TurnoDTO asignarCliente(@PathVariable Integer idTurno, @RequestBody PersonaDTO personaDto){
+        return iturno.asignarCliente(idTurno, personaDto);
     }
 }

@@ -50,5 +50,7 @@ public class Turno {
     public EstadoTurno getEstado() { return estado; }
 
     public void setEstado(EstadoTurno estado) { this.estado = estado; }
+
+
 }
 
