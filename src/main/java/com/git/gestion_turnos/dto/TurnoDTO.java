@@ -12,6 +12,7 @@ public class TurnoDTO {
     private LocalDate fecha;
     private LocalTime hora;
     private EstadoTurno estado;
+    private PersonaDTO cliente;
 
     public TurnoDTO(){}
 
@@ -41,5 +42,13 @@ public class TurnoDTO {
 
     public void setEstado(EstadoTurno estado) {
         this.estado = estado;
+    }
+
+    public PersonaDTO getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(PersonaDTO cliente) {
+        this.cliente = cliente;
     }
 }
