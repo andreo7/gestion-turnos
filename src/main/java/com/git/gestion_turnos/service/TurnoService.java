@@ -86,7 +86,7 @@ public class TurnoService implements ITurno{
         if(personaDto.getId() != null){
             persona = personaService.getById(personaDto.getId());
         }else {
-            Persona personaExistente = personaService.findByNombreAndTelefono(personaDto.getNombre(), personaDto.getTelefono());
+            Persona personaExistente = personaService.findByNombreAndApellidoAndTelefono(personaDto.getNombre(), personaDto.getApellido(), personaDto.getTelefono());
             if(personaExistente != null){
                 persona = personaExistente;
             }else{

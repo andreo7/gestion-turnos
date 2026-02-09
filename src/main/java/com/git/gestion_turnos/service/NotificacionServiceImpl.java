@@ -32,6 +32,7 @@ public class NotificacionServiceImpl implements INotificacion{
         notif.setFechaCreacion(LocalDateTime.now());
         notif.setTipo(TipoNotificacion.TURNO_CREADO);
         notif.setMensaje("Turno reservado para el" + turno.getFecha());
+        return null;
     }
 
     @Override
