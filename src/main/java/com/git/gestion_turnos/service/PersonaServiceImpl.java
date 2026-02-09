@@ -61,6 +61,15 @@ public class PersonaServiceImpl implements IPersona{
         return personaDTO;
     }
 
+    public Persona findByNombreAndTelefono(String nombre, String telefono){
+        return personaRepository.findByNombreAndTelefono(nombre, telefono);
+    }
+
+    public Persona getById(Integer id){
+        return personaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+    }
+
     @Override
     public void deleteById(Integer id) {
         personaRepository.deleteById(id);
