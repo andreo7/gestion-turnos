@@ -5,6 +5,7 @@ import com.git.gestion_turnos.dto.TurnoDTO;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.EstadoTurno;
+import com.git.gestion_turnos.mapper.TurnoMapper;
 import com.git.gestion_turnos.repository.TurnoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.cglib.core.Local;
@@ -21,6 +22,7 @@ import java.util.List;
 public class TurnoService implements ITurno{
     private final TurnoRepository turnoRepository;
     private final PersonaServiceImpl personaService;
+    private TurnoMapper turnoMapper;
     private static final LocalTime HORA_INICIO = LocalTime.of(8, 0);
     private static final LocalTime HORA_FIN = LocalTime.of(16, 0);
     private static final int DURACION_TURNO = 30;
@@ -36,19 +38,7 @@ public class TurnoService implements ITurno{
         List<TurnoDTO> turnosDto = new ArrayList<>();
 
         for(Turno t: turnos){
-            TurnoDTO turnoDto = new TurnoDTO();
-            turnoDto.setId(t.getId());
-            turnoDto.setHora(t.getHora());
-            turnoDto.setFecha(t.getFecha());
-            turnoDto.setEstado(t.getEstado());
-            Persona persona = t.getPersona();
-            PersonaDTO personaDto = new PersonaDTO();
-            personaDto.setNombre(persona.getNombre());
-            personaDto.setTelefono(persona.getTelefono());
-            personaDto.setId(persona.getId());
-
-            turnoDto.setCliente(personaDto);
-
+            TurnoDTO turnoDto = turnoMapper.toDto(t);
             turnosDto.add(turnoDto);
         }
 
@@ -91,6 +81,7 @@ public class TurnoService implements ITurno{
                 persona = personaExistente;
             }else{
                 persona.setNombre(personaDto.getNombre());
+                persona.setApellido(personaDto.getApellido());
                 persona.setTelefono(personaDto.getTelefono());
                 personaService.save(personaDto);
             }
