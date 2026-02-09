@@ -61,8 +61,8 @@ public class PersonaServiceImpl implements IPersona{
         return personaDTO;
     }
 
-    public Persona findByNombreAndTelefono(String nombre, String telefono){
-        return personaRepository.findByNombreAndTelefono(nombre, telefono);
+    public Persona findByNombreAndApellidoAndTelefono(String nombre,String apellido, String telefono){
+        return personaRepository.findByNombreAndApellidoAndTelefono(nombre, apellido, telefono);
     }
 
     public Persona getById(Integer id){

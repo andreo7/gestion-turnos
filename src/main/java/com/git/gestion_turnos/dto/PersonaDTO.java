@@ -13,6 +13,10 @@ public class PersonaDTO {
     @Size(min = 2, max = 50)
     private String nombre;
 
+    @NotBlank(message = "El apellido es obligatorio")
+    @Size(min = 2, max = 50)
+    private String apellido;
+
     @NotBlank(message = "El teléfono es obligatorio")
     @Pattern(
             regexp = "^[0-9+ ]{6,20}$",
@@ -45,5 +49,13 @@ public class PersonaDTO {
 
     public void setTelefono(String telefono){
         this.telefono = telefono;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 }
