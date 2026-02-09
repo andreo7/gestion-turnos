@@ -2,7 +2,9 @@ package com.git.gestion_turnos.mapper;
 
 import com.git.gestion_turnos.dto.PersonaDTO;
 import com.git.gestion_turnos.entity.Persona;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PersonaMapper {
 
     public PersonaDTO toDTO(Persona persona){
