@@ -1,0 +1,22 @@
+package com.git.gestion_turnos.service;
+
+import com.git.gestion_turnos.dto.NotificacionDTO;
+import com.git.gestion_turnos.entity.Persona;
+import com.git.gestion_turnos.entity.Turno;
+
+import java.util.List;
+
+public interface INotificacion {
+
+    NotificacionDTO crearNotificacionReserva(Persona persona, Turno turno);
+
+    NotificacionDTO crearRecordatorio24h(Persona persona, Turno turno);
+
+    void marcarComoEnviada(Long notificacionId);
+
+    void marcarComoRespondida(Long notificacionId);
+
+    List<NotificacionDTO> findByPersona(Long personaId);
+
+    NotificacionDTO findById(Long id);
+}
