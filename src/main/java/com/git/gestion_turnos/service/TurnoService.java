@@ -5,10 +5,10 @@ import com.git.gestion_turnos.dto.TurnoDTO;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.EstadoTurno;
+import com.git.gestion_turnos.mapper.PersonaMapper;
 import com.git.gestion_turnos.mapper.TurnoMapper;
 import com.git.gestion_turnos.repository.TurnoRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -21,16 +21,19 @@ import java.util.List;
 @Service
 public class TurnoService implements ITurno{
     private final TurnoRepository turnoRepository;
-    private final PersonaServiceImpl personaService;
-    private TurnoMapper turnoMapper;
+    private final IPersona personaService;
+    private final TurnoMapper turnoMapper;
+    private final PersonaMapper personaMapper;
     private static final LocalTime HORA_INICIO = LocalTime.of(8, 0);
     private static final LocalTime HORA_FIN = LocalTime.of(16, 0);
     private static final int DURACION_TURNO = 30;
 
-
-    public TurnoService(TurnoRepository turnoRepository, PersonaServiceImpl personaService){
-        this.turnoRepository = turnoRepository; //Inyecto el repositorio.
+    //Inyecto los componentes que TurnoService necesita para funcionar.
+    public TurnoService(TurnoRepository turnoRepository, IPersona personaService, TurnoMapper turnoMapper, PersonaMapper personaMapper){
+        this.turnoRepository = turnoRepository;
         this.personaService = personaService;
+        this.turnoMapper = turnoMapper;
+        this.personaMapper = personaMapper;
     }
 
     public List<TurnoDTO> findAll(){
@@ -48,21 +51,7 @@ public class TurnoService implements ITurno{
     public TurnoDTO findById(Integer id){
         Turno turno = turnoRepository.findById(id).orElseThrow(() -> new RuntimeException("Turno no encontrado"));
 
-        TurnoDTO turnoDto = new TurnoDTO();
-        turnoDto.setId(turno.getId());
-        turnoDto.setEstado(turno.getEstado());
-        turnoDto.setFecha(turno.getFecha());
-        turnoDto.setHora(turno.getHora());
-
-        Persona persona = turno.getPersona();
-        PersonaDTO personaDto = new PersonaDTO();
-        personaDto.setId(persona.getId());
-        personaDto.setTelefono(persona.getTelefono());
-        personaDto.setNombre(persona.getNombre());
-
-        turnoDto.setCliente(personaDto);
-
-        return turnoDto;
+        return turnoMapper.toDto(turno);
     }
 
     //Asigna a un turno un cliente existenete. En el caso de que el cliente no exista se crea y guarda en la BD.
@@ -70,20 +59,18 @@ public class TurnoService implements ITurno{
     public TurnoDTO asignarCliente(Integer idTurno, PersonaDTO personaDto){
         Turno turno = turnoRepository.findById(idTurno).orElseThrow(() -> new RuntimeException("Turno no encontrado"));
 
-
         Persona persona = new Persona();
         //Veo si en el body de la request me llega el id de la persona
         if(personaDto.getId() != null){
             persona = personaService.getById(personaDto.getId());
         }else {
+            //Verifico que la persona exista usando su nombre, apellido y telefono.
             Persona personaExistente = personaService.findByNombreAndApellidoAndTelefono(personaDto.getNombre(), personaDto.getApellido(), personaDto.getTelefono());
             if(personaExistente != null){
                 persona = personaExistente;
             }else{
-                persona.setNombre(personaDto.getNombre());
-                persona.setApellido(personaDto.getApellido());
-                persona.setTelefono(personaDto.getTelefono());
-                personaService.save(personaDto);
+                PersonaDTO personaGuardada = personaService.save(personaDto);
+                persona = personaMapper.toEntity(personaGuardada);
             }
         }
 
@@ -91,14 +78,7 @@ public class TurnoService implements ITurno{
         turno.setEstado(EstadoTurno.RESERVADO);
         turnoRepository.save(turno);
 
-        TurnoDTO turnoDto = new TurnoDTO();
-        turnoDto.setId(turno.getId());
-        turnoDto.setEstado(turno.getEstado());
-        turnoDto.setFecha(turno.getFecha());
-        turnoDto.setHora(turno.getHora());
-        turnoDto.setCliente(personaDto);
-
-        return turnoDto;
+        return turnoMapper.toDto(turno);
     }
 
     //Genera los turnos del mes siguiente al actual solo si no existen turnos ya creados.

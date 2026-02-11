@@ -22,8 +22,10 @@ public class TurnoMapper {
         turnoDto.setEstado(turno.getEstado());
 
         Persona persona = turno.getPersona();
-        PersonaDTO personaDTO = personaMapper.toDTO(persona);
-        turnoDto.setCliente(personaDTO);
+        if(persona != null) {
+            PersonaDTO personaDTO = personaMapper.toDTO(persona);
+            turnoDto.setCliente(personaDTO);
+        }
 
         return turnoDto;
     }

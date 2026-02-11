@@ -46,8 +46,9 @@ public class PersonaServiceImpl implements IPersona{
 
     @Override
     public PersonaDTO findById(Integer id) {
-       Persona persona = personaRepository.findById(id)
+        Persona persona = personaRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+
         PersonaDTO personaDTO = personaMapper.toDTO(persona);
         return personaDTO;
     }
