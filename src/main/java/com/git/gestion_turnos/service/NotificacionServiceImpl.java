@@ -32,32 +32,33 @@ public class NotificacionServiceImpl implements INotificacion{
         not.setMensaje("Su turno en la fecha: " + turno.getFecha() + "Es dentro de 24 horas " +
                         "\n para confimar responda SI, para cancelar responda NO.");
         not.setRespondida(false);
+        not.setEnviada(false);
         not.setTipo(TipoNotificacion.RECORDATORIO);
         not.setFechaCreacion(LocalDateTime.now());
         not.setFechaRespuesta(null);
         Notificacion notguardada = notificacionRepository.save(not);
-        NotificacionDTO notResponse = notificacionMapper.toDTO(notguardada);
-
-        return notResponse;
+        return notificacionMapper.toDTO(notguardada);
     }
 
     @Override
-    public void marcarComoEnviada(Long notificacionId) {
-
-    }
-
-    @Override
-    public void marcarComoRespondida(Long notificacionId) {
+    public void marcarComoEnviada(Integer notificacionId) {
 
     }
 
     @Override
-    public List<NotificacionDTO> findByPersona(Long personaId) {
+    public void marcarComoRespondida(Integer notificacionId) {
+        Notificacion notif = notificacionRepository.findById(notificacionId).get();
+        notif.setEnviada(true);
+        notificacionRepository.save(notif);
+    }
+
+    @Override
+    public List<NotificacionDTO> findByPersona(Integer personaId) {
         return List.of();
     }
 
     @Override
-    public NotificacionDTO findById(Long id) {
+    public NotificacionDTO findById(Integer id) {
         return null;
     }
 }

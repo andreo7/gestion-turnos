@@ -11,11 +11,11 @@ public interface INotificacion {
 
     NotificacionDTO crearRecordatorio24h(Persona persona, Turno turno);
 
-    void marcarComoEnviada(Long notificacionId);
+    void marcarComoEnviada(Integer notificacionId);
 
-    void marcarComoRespondida(Long notificacionId);
+    void marcarComoRespondida(Integer notificacionId);
 
-    List<NotificacionDTO> findByPersona(Long personaId);
+    List<NotificacionDTO> findByPersona(Integer personaId);
 
-    NotificacionDTO findById(Long id);
+    NotificacionDTO findById(Integer id);
 }
