@@ -93,6 +93,13 @@ public class TurnoService implements ITurno{
         return turnoMapper.toDto(turno);
     }
 
+    public void confirmarTurno(Turno turno){
+        turno = turnoRepository.findById(turno.getId()).orElseThrow(() -> new RuntimeException("El turno no existe"));
+
+        turno.setEstado(EstadoTurno.CONFIRMADO);
+        turnoRepository.save(turno);
+    }
+
     //Genera los turnos del mes siguiente al actual solo si no existen turnos ya creados.
     @Transactional
     public void generarTurnosMesSiguiente(){
@@ -140,6 +147,5 @@ public class TurnoService implements ITurno{
         DayOfWeek dia = fecha.getDayOfWeek();
         return dia != DayOfWeek.SATURDAY && dia != DayOfWeek.SUNDAY;
     }
-
 
 }
