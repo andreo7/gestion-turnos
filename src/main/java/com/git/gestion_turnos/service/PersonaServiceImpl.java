@@ -3,6 +3,7 @@ package com.git.gestion_turnos.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.git.gestion_turnos.mapper.PersonaMapper;
 import org.springframework.stereotype.Service;
 
 import com.git.gestion_turnos.dto.PersonaDTO;
@@ -14,23 +15,19 @@ public class PersonaServiceImpl implements IPersona{
 
     private PersonaRepository personaRepository;
 
+    private PersonaMapper personaMapper;
+
     //Se inyecta por constructor el bean que el service necesita para funcionar.
-    public PersonaServiceImpl(PersonaRepository personaRepository){
+    public PersonaServiceImpl(PersonaRepository personaRepository, PersonaMapper personaMapper){
         this.personaRepository = personaRepository;
+        this.personaMapper = personaMapper;
     }
 
     @Override
     public PersonaDTO save(PersonaDTO dto) {
-        Persona persona = new Persona();
-        persona.setNombre(dto.getNombre());
-        persona.setTelefono(dto.getTelefono());
-
+        Persona persona = personaMapper.toEntity(dto);
         Persona guardada = personaRepository.save(persona);
-
-        PersonaDTO respuesta = new PersonaDTO();
-        respuesta.setNombre(guardada.getNombre());
-        respuesta.setTelefono(guardada.getTelefono());
-        
+        PersonaDTO respuesta = personaMapper.toDTO(guardada);
         return respuesta;
     }
 
@@ -40,10 +37,7 @@ public class PersonaServiceImpl implements IPersona{
         List<PersonaDTO> dtos = new ArrayList<>();
 
         for(Persona p : personas){
-            PersonaDTO pdto = new PersonaDTO();
-            pdto.setId(p.getId());
-            pdto.setNombre(p.getNombre());
-            pdto.setTelefono(p.getTelefono());
+            PersonaDTO pdto = personaMapper.toDTO(p);
             dtos.add(pdto);
         }
 
@@ -52,12 +46,10 @@ public class PersonaServiceImpl implements IPersona{
 
     @Override
     public PersonaDTO findById(Integer id) {
-        PersonaDTO personaDTO = new PersonaDTO();
-       Persona persona = personaRepository.findById(id)
+        Persona persona = personaRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
-        personaDTO.setId(persona.getId());
-        personaDTO.setNombre(persona.getNombre());
-        personaDTO.setTelefono(persona.getTelefono());
+
+        PersonaDTO personaDTO = personaMapper.toDTO(persona);
         return personaDTO;
     }
 
@@ -82,13 +74,11 @@ public class PersonaServiceImpl implements IPersona{
 
         personaBD.setNombre(dto.getNombre());
         personaBD.setTelefono(dto.getTelefono());
+        personaBD.setApellido(dto.getApellido());
 
         Persona guardada = personaRepository.save(personaBD);
 
-        PersonaDTO response = new PersonaDTO();
-        response.setId(guardada.getId());
-        response.setNombre(guardada.getNombre());
-        response.setTelefono(guardada.getTelefono());
+        PersonaDTO response = personaMapper.toDTO(guardada);
 
         return response;
     }

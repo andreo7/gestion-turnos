@@ -17,7 +17,7 @@ public class TurnoController {
         this.iturno = iturno;
     }
 
-    @PostMapping //Endpoint utilizado para generar los turnos del primer mes (solo uso de admin. El resto se genera con el disparador shedule
+    @PostMapping("/crear") //Endpoint utilizado para generar los turnos del primer mes (solo uso de admin. El resto se genera con el disparador schedule
     public void crearTurnos(@RequestParam int anio, @RequestParam int mes){
         iturno.crearTurnosEnUnMes(anio, mes);
     }
@@ -32,8 +32,13 @@ public class TurnoController {
         return iturno.findById(id);
     }
 
-    @PatchMapping("/{idTurno}")
+    @PatchMapping("/{idTurno}/reservar")
     public TurnoDTO asignarCliente(@PathVariable Integer idTurno, @RequestBody PersonaDTO personaDto){
         return iturno.asignarCliente(idTurno, personaDto);
+    }
+
+    @PatchMapping("/{id}/cancelar")
+    public TurnoDTO cancelarReserva(@PathVariable Integer id){
+        return iturno.cancelarReserva(id);
     }
 }

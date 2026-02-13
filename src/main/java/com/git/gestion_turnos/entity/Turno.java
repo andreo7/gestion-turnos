@@ -25,13 +25,6 @@ public class Turno {
     @JoinColumn(name = "persona_id")
     private Persona persona;
 
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
-    }
 
     public Turno(){}
 
@@ -51,6 +44,12 @@ public class Turno {
 
     public void setEstado(EstadoTurno estado) { this.estado = estado; }
 
+    public Persona getPersona() {
+        return persona;
+    }
 
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
 }
 
