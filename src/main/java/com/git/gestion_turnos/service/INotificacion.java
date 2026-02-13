@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface INotificacion {
 
-    NotificacionDTO crearNotificacionReserva(Persona persona, Turno turno);
 
     NotificacionDTO crearRecordatorio24h(Persona persona, Turno turno);
 

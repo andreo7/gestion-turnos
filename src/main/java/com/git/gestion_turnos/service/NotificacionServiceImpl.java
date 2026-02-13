@@ -5,6 +5,7 @@ import com.git.gestion_turnos.entity.Notificacion;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.TipoNotificacion;
+import com.git.gestion_turnos.mapper.NotificacionMapper;
 import com.git.gestion_turnos.repository.NotificacionRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,29 +16,29 @@ import java.util.List;
 public class NotificacionServiceImpl implements INotificacion{
 
     private NotificacionRepository notificacionRepository;
+    private NotificacionMapper notificacionMapper;
 
-    public NotificacionServiceImpl(NotificacionRepository notificacionRepository){
+    public NotificacionServiceImpl(NotificacionRepository notificacionRepository,
+                                   NotificacionMapper notificacionMapper){
         this.notificacionRepository = notificacionRepository;
-    }
-
-
-
-    @Override
-    public NotificacionDTO crearNotificacionReserva(Persona persona, Turno turno) {
-        Notificacion notif = new Notificacion();
-        notif.setPersona(persona);
-        notif.setTurno(turno);
-        notif.setEnviada(false);
-        notif.setRespondida(false);
-        notif.setFechaCreacion(LocalDateTime.now());
-        notif.setTipo(TipoNotificacion.TURNO_CREADO);
-        notif.setMensaje("Turno reservado para el" + turno.getFecha());
-        return null;
+        this.notificacionMapper = notificacionMapper;
     }
 
     @Override
     public NotificacionDTO crearRecordatorio24h(Persona persona, Turno turno) {
-        return null;
+        Notificacion not = new Notificacion();
+        not.setPersona(persona);
+        not.setTurno(turno);
+        not.setMensaje("Su turno en la fecha: " + turno.getFecha() + "Es dentro de 24 horas " +
+                        "\n para confimar responda SI, para cancelar responda NO.");
+        not.setRespondida(false);
+        not.setTipo(TipoNotificacion.RECORDATORIO);
+        not.setFechaCreacion(LocalDateTime.now());
+        not.setFechaRespuesta(null);
+        Notificacion notguardada = notificacionRepository.save(not);
+        NotificacionDTO notResponse = notificacionMapper.toDTO(notguardada);
+
+        return notResponse;
     }
 
     @Override

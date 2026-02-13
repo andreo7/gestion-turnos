@@ -16,9 +16,14 @@ public class Notificacion {
     @JoinColumn(name = "persona_id")
     private Persona persona;
 
+    //El texto que vas a mostrar o mandar
     private String mensaje;
+
+    //Cuándo se generó la notificación.
     private LocalDateTime fechaCreacion;
+
     private boolean enviada;
+
     @Enumerated(EnumType.STRING)
     private TipoNotificacion tipo;
 
@@ -27,6 +32,7 @@ public class Notificacion {
     private Turno turno;
 
     private boolean respondida;
+
     private LocalDateTime fechaRespuesta;
 
     public Notificacion(){
