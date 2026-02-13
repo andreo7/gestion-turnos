@@ -9,7 +9,9 @@ import com.git.gestion_turnos.mapper.PersonaMapper;
 import com.git.gestion_turnos.mapper.TurnoMapper;
 import com.git.gestion_turnos.repository.TurnoRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -81,15 +83,27 @@ public class TurnoService implements ITurno{
         return turnoMapper.toDto(turno);
     }
 
+    public TurnoDTO cancelarReserva(Integer id){
+        Turno turno = turnoRepository.findById(id).orElseThrow(() -> new RuntimeException("El turno no existe"));
+
+        turno.setPersona(null);
+        turno.setEstado(EstadoTurno.DISPONIBLE);
+        turnoRepository.save(turno);
+
+        return turnoMapper.toDto(turno);
+    }
+
     //Genera los turnos del mes siguiente al actual solo si no existen turnos ya creados.
     @Transactional
     public void generarTurnosMesSiguiente(){
         LocalDate hoy = LocalDate.now();
         LocalDate siguienteMes = hoy.plusMonths(1);
 
-        if(turnoRepository.existenTurnosEnMes(siguienteMes.getYear(), siguienteMes.getMonth().getValue()).isEmpty()) {
-            crearTurnosEnUnMes(siguienteMes.getYear(), siguienteMes.getMonth().getValue());
+        if(!turnoRepository.existenTurnosEnMes(siguienteMes.getYear(), siguienteMes.getMonth().getValue()).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Los turnos para el siguiente mes ya existen");
         }
+
+        crearTurnosEnUnMes(siguienteMes.getYear(), siguienteMes.getMonth().getValue());
     }
 
     public void crearTurnosEnUnMes(int anio, int mes){

@@ -12,4 +12,5 @@ public interface ITurno {
     List<TurnoDTO> findAll();
     TurnoDTO findById(Integer id);
     TurnoDTO asignarCliente(Integer id, PersonaDTO personaDto);
+    TurnoDTO cancelarReserva(Integer id);
 }
