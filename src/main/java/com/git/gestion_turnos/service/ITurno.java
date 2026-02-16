@@ -11,7 +11,9 @@ public interface ITurno {
     void generarTurnosMesSiguiente();
     List<TurnoDTO> findAll();
     TurnoDTO findById(Integer id);
-    TurnoDTO asignarCliente(Integer id, PersonaDTO personaDto);
-    TurnoDTO cancelarReserva(Integer id);
+    TurnoDTO reservarTurno(Integer id, PersonaDTO personaDto);
+    TurnoDTO cancelarTurno(Integer id);
     void confirmarTurno(Turno turno);
+    List<TurnoDTO> verTurnosDisponibles();
+    List<TurnoDTO> verTurnosOcupados();
 }

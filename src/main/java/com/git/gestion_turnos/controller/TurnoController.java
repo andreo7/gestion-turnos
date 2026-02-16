@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/turnos")
 public class TurnoController {
-    private ITurno iturno;
+    private final ITurno iturno;
 
     //Se inyecta por constructor el service (Spring usa la implementacion de la interfaz como bean)
     public TurnoController(ITurno iturno){
@@ -33,12 +33,22 @@ public class TurnoController {
     }
 
     @PatchMapping("/{idTurno}/reservar")
-    public TurnoDTO asignarCliente(@PathVariable Integer idTurno, @RequestBody PersonaDTO personaDto){
-        return iturno.asignarCliente(idTurno, personaDto);
+    public TurnoDTO reservarTurno(@PathVariable Integer idTurno, @RequestBody PersonaDTO personaDto){
+        return iturno.reservarTurno(idTurno, personaDto);
     }
 
     @PatchMapping("/{id}/cancelar")
-    public TurnoDTO cancelarReserva(@PathVariable Integer id){
-        return iturno.cancelarReserva(id);
+    public TurnoDTO cancelarTurno(@PathVariable Integer id){
+        return iturno.cancelarTurno(id);
+    }
+
+    @GetMapping("/disponibles")
+    public List<TurnoDTO> verTurnosDisponibles(){
+        return iturno.verTurnosDisponibles();
+    }
+
+    @GetMapping("/ocupados")
+    public List<TurnoDTO> verTurnosOcupados(){
+        return iturno.verTurnosOcupados();
     }
 }

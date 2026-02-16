@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.git.gestion_turnos.mapper.PersonaMapper;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.git.gestion_turnos.dto.PersonaDTO;
@@ -81,6 +82,21 @@ public class PersonaServiceImpl implements IPersona{
         PersonaDTO response = personaMapper.toDTO(guardada);
 
         return response;
+    }
+
+    //Ve si la persona existe por sus atributos, si no es asi, crea una nueva persona
+    public Persona obtenerPersonaOCrear(@NonNull PersonaDTO personaDto){
+        Persona personaExistente = findByNombreAndApellidoAndTelefono(personaDto.getNombre(), personaDto.getApellido(), personaDto.getTelefono());
+
+        Persona persona;
+        if(personaExistente != null){
+            return personaExistente;
+        }else {
+            PersonaDTO personaGuardada = save(personaDto);
+            persona = personaMapper.toEntity(personaGuardada);
+        }
+
+        return persona;
     }
 
 }
