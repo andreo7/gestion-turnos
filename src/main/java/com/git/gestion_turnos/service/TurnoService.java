@@ -82,6 +82,13 @@ public class TurnoService implements ITurno{
     public TurnoDTO cancelarTurno(Integer id){
         Turno turno = obtenerTurnoPorId(id);
 
+        if(turno.getEstado() != EstadoTurno.RESERVADO || turno.getEstado() != EstadoTurno.CONFIRMADO){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible cancelar el turno debido a que esta DISPONIBLE");
+        }
+        if(turno.getPersona() == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible cancelar el turno debido a que no tiene un cliente al cual cancelar");
+        }
+
         turno.setPersona(null);
         turno.setEstado(EstadoTurno.DISPONIBLE);
         turnoRepository.save(turno);
@@ -90,10 +97,17 @@ public class TurnoService implements ITurno{
     }
 
     public void confirmarTurno(Turno turno){
-        turno = turnoRepository.findById(turno.getId()).orElseThrow(() -> new RuntimeException("El turno no existe"));
+        Turno turnoConfirmado = obtenerTurnoPorId(turno.getId());
 
-        turno.setEstado(EstadoTurno.CONFIRMADO);
-        turnoRepository.save(turno);
+        if(turno.getEstado() != EstadoTurno.RESERVADO){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible confirmar un turno no reservado");
+        }
+        if(turno.getPersona() != null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible confirmar el turno si no tiene una persona asociada");
+        }
+
+        turnoConfirmado.setEstado(EstadoTurno.CONFIRMADO);
+        turnoRepository.save(turnoConfirmado);
     }
 
     //Genera los turnos del mes siguiente al actual solo si no existen turnos ya creados.
