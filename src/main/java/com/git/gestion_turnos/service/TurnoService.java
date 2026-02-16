@@ -5,7 +5,6 @@ import com.git.gestion_turnos.dto.TurnoDTO;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.EstadoTurno;
-import com.git.gestion_turnos.mapper.PersonaMapper;
 import com.git.gestion_turnos.mapper.TurnoMapper;
 import com.git.gestion_turnos.repository.TurnoRepository;
 import jakarta.transaction.Transactional;
@@ -27,17 +26,15 @@ public class TurnoService implements ITurno{
     private final TurnoRepository turnoRepository;
     private final IPersona personaService;
     private final TurnoMapper turnoMapper;
-    private final PersonaMapper personaMapper;
     private static final LocalTime HORA_INICIO = LocalTime.of(8, 0);
     private static final LocalTime HORA_FIN = LocalTime.of(16, 0);
     private static final int DURACION_TURNO = 30;
 
     //Inyecto los componentes que TurnoService necesita para funcionar.
-    public TurnoService(TurnoRepository turnoRepository, IPersona personaService, TurnoMapper turnoMapper, PersonaMapper personaMapper){
+    public TurnoService(TurnoRepository turnoRepository, IPersona personaService, TurnoMapper turnoMapper){
         this.turnoRepository = turnoRepository;
         this.personaService = personaService;
         this.turnoMapper = turnoMapper;
-        this.personaMapper = personaMapper;
     }
 
     public List<TurnoDTO> findAll(){
@@ -60,8 +57,12 @@ public class TurnoService implements ITurno{
 
     //Asigna a un turno un cliente existenete. En el caso de que el cliente no exista se crea y guarda en la BD.
     @Transactional
-    public TurnoDTO asignarCliente(Integer idTurno, @NonNull PersonaDTO personaDto){
+    public TurnoDTO reservarTurno(Integer idTurno, @NonNull PersonaDTO personaDto){
         Turno turno = obtenerTurnoPorId(idTurno);
+
+        if(turno.getEstado() != EstadoTurno.DISPONIBLE){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El turno no esta disponible para reservar");
+        }
 
         Persona persona;
         //Veo si en el body de la request me llega el id de la persona
@@ -78,7 +79,7 @@ public class TurnoService implements ITurno{
         return turnoMapper.toDto(turno);
     }
 
-    public TurnoDTO cancelarReserva(Integer id){
+    public TurnoDTO cancelarTurno(Integer id){
         Turno turno = obtenerTurnoPorId(id);
 
         turno.setPersona(null);
