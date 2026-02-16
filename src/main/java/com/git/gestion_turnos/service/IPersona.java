@@ -13,4 +13,5 @@ public interface IPersona {
     PersonaDTO update(Integer id, PersonaDTO dto);
     Persona findByNombreAndApellidoAndTelefono(String nombre, String apellido, String telefono);
     Persona getById(Integer id);
+    Persona obtenerPersonaOCrear(PersonaDTO personaDto);
 }

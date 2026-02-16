@@ -9,6 +9,8 @@ import com.git.gestion_turnos.mapper.PersonaMapper;
 import com.git.gestion_turnos.mapper.TurnoMapper;
 import com.git.gestion_turnos.repository.TurnoRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -51,29 +53,22 @@ public class TurnoService implements ITurno{
     }
 
     public TurnoDTO findById(Integer id){
-        Turno turno = turnoRepository.findById(id).orElseThrow(() -> new RuntimeException("Turno no encontrado"));
+        Turno turno = obtenerTurnoPorId(id);
 
         return turnoMapper.toDto(turno);
     }
 
     //Asigna a un turno un cliente existenete. En el caso de que el cliente no exista se crea y guarda en la BD.
     @Transactional
-    public TurnoDTO asignarCliente(Integer idTurno, PersonaDTO personaDto){
-        Turno turno = turnoRepository.findById(idTurno).orElseThrow(() -> new RuntimeException("Turno no encontrado"));
+    public TurnoDTO asignarCliente(Integer idTurno, @NonNull PersonaDTO personaDto){
+        Turno turno = obtenerTurnoPorId(idTurno);
 
-        Persona persona = new Persona();
+        Persona persona;
         //Veo si en el body de la request me llega el id de la persona
         if(personaDto.getId() != null){
             persona = personaService.getById(personaDto.getId());
-        }else {
-            //Verifico que la persona exista usando su nombre, apellido y telefono.
-            Persona personaExistente = personaService.findByNombreAndApellidoAndTelefono(personaDto.getNombre(), personaDto.getApellido(), personaDto.getTelefono());
-            if(personaExistente != null){
-                persona = personaExistente;
-            }else{
-                PersonaDTO personaGuardada = personaService.save(personaDto);
-                persona = personaMapper.toEntity(personaGuardada);
-            }
+        }else{
+            persona = personaService.obtenerPersonaOCrear(personaDto);
         }
 
         turno.setPersona(persona);
@@ -84,7 +79,7 @@ public class TurnoService implements ITurno{
     }
 
     public TurnoDTO cancelarReserva(Integer id){
-        Turno turno = turnoRepository.findById(id).orElseThrow(() -> new RuntimeException("El turno no existe"));
+        Turno turno = obtenerTurnoPorId(id);
 
         turno.setPersona(null);
         turno.setEstado(EstadoTurno.DISPONIBLE);
@@ -143,9 +138,15 @@ public class TurnoService implements ITurno{
         }
     }
 
-    private boolean diaLaborable(LocalDate fecha){
+    private boolean diaLaborable(@NonNull LocalDate fecha){
         DayOfWeek dia = fecha.getDayOfWeek();
         return dia != DayOfWeek.SATURDAY && dia != DayOfWeek.SUNDAY;
     }
+
+    private Turno obtenerTurnoPorId(@NotNull Integer id){
+        return turnoRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "El turno no fue encontrado"));
+    }
+
 
 }
