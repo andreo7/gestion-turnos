@@ -14,4 +14,6 @@ public interface ITurno {
     TurnoDTO reservarTurno(Integer id, PersonaDTO personaDto);
     TurnoDTO cancelarTurno(Integer id);
     void confirmarTurno(Turno turno);
+    List<TurnoDTO> verTurnosDisponibles();
+    List<TurnoDTO> verTurnosOcupados();
 }

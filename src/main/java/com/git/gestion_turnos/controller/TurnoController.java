@@ -41,4 +41,14 @@ public class TurnoController {
     public TurnoDTO cancelarTurno(@PathVariable Integer id){
         return iturno.cancelarTurno(id);
     }
+
+    @GetMapping("/disponibles")
+    public List<TurnoDTO> verTurnosDisponibles(){
+        return iturno.verTurnosDisponibles();
+    }
+
+    @GetMapping("/ocupados")
+    public List<TurnoDTO> verTurnosOcupados(){
+        return iturno.verTurnosOcupados();
+    }
 }

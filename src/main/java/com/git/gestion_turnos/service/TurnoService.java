@@ -110,6 +110,34 @@ public class TurnoService implements ITurno{
         turnoRepository.save(turnoConfirmado);
     }
 
+    public List<TurnoDTO> verTurnosDisponibles(){
+        List<Turno> turnos = turnoRepository.findAll();
+        List<TurnoDTO> turnosDto = new ArrayList<>();
+
+        for(Turno t: turnos){
+            if(t.getEstado() == EstadoTurno.DISPONIBLE){
+                TurnoDTO turnoDto = turnoMapper.toDto(t);
+                turnosDto.add(turnoDto);
+            }
+        }
+
+        return turnosDto;
+    }
+
+    public List<TurnoDTO> verTurnosOcupados(){
+        List<Turno> turnos = turnoRepository.findAll();
+        List<TurnoDTO> turnosDto = new ArrayList<>();
+
+        for(Turno t: turnos){
+            if(t.getEstado() == EstadoTurno.RESERVADO || t.getEstado() == EstadoTurno.CONFIRMADO){
+                TurnoDTO turnoDto = turnoMapper.toDto(t);
+                turnosDto.add(turnoDto);
+            }
+        }
+
+        return turnosDto;
+    }
+
     //Genera los turnos del mes siguiente al actual solo si no existen turnos ya creados.
     @Transactional
     public void generarTurnosMesSiguiente(){
