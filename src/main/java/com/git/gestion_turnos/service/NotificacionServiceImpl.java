@@ -10,6 +10,7 @@ import com.git.gestion_turnos.repository.NotificacionRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,23 +43,38 @@ public class NotificacionServiceImpl implements INotificacion{
 
     @Override
     public void marcarComoEnviada(Integer notificacionId) {
-
-    }
-
-    @Override
-    public void marcarComoRespondida(Integer notificacionId) {
-        Notificacion notif = notificacionRepository.findById(notificacionId).get();
+        Notificacion notif = notificacionRepository.findById(notificacionId)
+                .orElseThrow(() -> new RuntimeException("Notificacion no encontrada"));
         notif.setEnviada(true);
         notificacionRepository.save(notif);
     }
 
     @Override
+    public void marcarComoRespondida(Integer notificacionId) {
+        Notificacion notif = notificacionRepository.findById(notificacionId)
+                .orElseThrow(() -> new RuntimeException("Notificacion no encontrada"));
+        notif.setRespondida(true);
+        notif.setFechaRespuesta(LocalDateTime.now());
+        notificacionRepository.save(notif);
+    }
+
+    @Override
     public List<NotificacionDTO> findByPersona(Integer personaId) {
-        return List.of();
+        List<NotificacionDTO> resultado = new ArrayList<>();
+        List<Notificacion> lista = notificacionRepository.findByPersonaId(personaId);
+
+        for(Notificacion n : lista){
+            resultado.add(notificacionMapper.toDTO(n));
+        }
+
+        return resultado;
     }
 
     @Override
     public NotificacionDTO findById(Integer id) {
-        return null;
+        Notificacion not = notificacionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Notificacion no encontrada"));
+
+        return notificacionMapper.toDTO(not);
     }
 }
