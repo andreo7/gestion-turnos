@@ -5,10 +5,11 @@ import com.git.gestion_turnos.dto.TurnoDTO;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.EstadoTurno;
-import com.git.gestion_turnos.mapper.PersonaMapper;
 import com.git.gestion_turnos.mapper.TurnoMapper;
 import com.git.gestion_turnos.repository.TurnoRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,17 +26,15 @@ public class TurnoService implements ITurno{
     private final TurnoRepository turnoRepository;
     private final IPersona personaService;
     private final TurnoMapper turnoMapper;
-    private final PersonaMapper personaMapper;
     private static final LocalTime HORA_INICIO = LocalTime.of(8, 0);
     private static final LocalTime HORA_FIN = LocalTime.of(16, 0);
     private static final int DURACION_TURNO = 30;
 
     //Inyecto los componentes que TurnoService necesita para funcionar.
-    public TurnoService(TurnoRepository turnoRepository, IPersona personaService, TurnoMapper turnoMapper, PersonaMapper personaMapper){
+    public TurnoService(TurnoRepository turnoRepository, IPersona personaService, TurnoMapper turnoMapper){
         this.turnoRepository = turnoRepository;
         this.personaService = personaService;
         this.turnoMapper = turnoMapper;
-        this.personaMapper = personaMapper;
     }
 
     public List<TurnoDTO> findAll(){
@@ -51,29 +50,26 @@ public class TurnoService implements ITurno{
     }
 
     public TurnoDTO findById(Integer id){
-        Turno turno = turnoRepository.findById(id).orElseThrow(() -> new RuntimeException("Turno no encontrado"));
+        Turno turno = obtenerTurnoPorId(id);
 
         return turnoMapper.toDto(turno);
     }
 
     //Asigna a un turno un cliente existenete. En el caso de que el cliente no exista se crea y guarda en la BD.
     @Transactional
-    public TurnoDTO asignarCliente(Integer idTurno, PersonaDTO personaDto){
-        Turno turno = turnoRepository.findById(idTurno).orElseThrow(() -> new RuntimeException("Turno no encontrado"));
+    public TurnoDTO reservarTurno(Integer idTurno, @NonNull PersonaDTO personaDto){
+        Turno turno = obtenerTurnoPorId(idTurno);
 
-        Persona persona = new Persona();
+        if(turno.getEstado() != EstadoTurno.DISPONIBLE){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El turno no esta disponible para reservar");
+        }
+
+        Persona persona;
         //Veo si en el body de la request me llega el id de la persona
         if(personaDto.getId() != null){
             persona = personaService.getById(personaDto.getId());
-        }else {
-            //Verifico que la persona exista usando su nombre, apellido y telefono.
-            Persona personaExistente = personaService.findByNombreAndApellidoAndTelefono(personaDto.getNombre(), personaDto.getApellido(), personaDto.getTelefono());
-            if(personaExistente != null){
-                persona = personaExistente;
-            }else{
-                PersonaDTO personaGuardada = personaService.save(personaDto);
-                persona = personaMapper.toEntity(personaGuardada);
-            }
+        }else{
+            persona = personaService.obtenerPersonaOCrear(personaDto);
         }
 
         turno.setPersona(persona);
@@ -83,8 +79,15 @@ public class TurnoService implements ITurno{
         return turnoMapper.toDto(turno);
     }
 
-    public TurnoDTO cancelarReserva(Integer id){
-        Turno turno = turnoRepository.findById(id).orElseThrow(() -> new RuntimeException("El turno no existe"));
+    public TurnoDTO cancelarTurno(Integer id){
+        Turno turno = obtenerTurnoPorId(id);
+
+        if(turno.getEstado() != EstadoTurno.RESERVADO || turno.getEstado() != EstadoTurno.CONFIRMADO){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible cancelar el turno debido a que esta DISPONIBLE");
+        }
+        if(turno.getPersona() == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible cancelar el turno debido a que no tiene un cliente al cual cancelar");
+        }
 
         turno.setPersona(null);
         turno.setEstado(EstadoTurno.DISPONIBLE);
@@ -94,10 +97,45 @@ public class TurnoService implements ITurno{
     }
 
     public void confirmarTurno(Turno turno){
-        turno = turnoRepository.findById(turno.getId()).orElseThrow(() -> new RuntimeException("El turno no existe"));
+        Turno turnoConfirmado = obtenerTurnoPorId(turno.getId());
 
-        turno.setEstado(EstadoTurno.CONFIRMADO);
-        turnoRepository.save(turno);
+        if(turno.getEstado() != EstadoTurno.RESERVADO){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible confirmar un turno no reservado");
+        }
+        if(turno.getPersona() != null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible confirmar el turno si no tiene una persona asociada");
+        }
+
+        turnoConfirmado.setEstado(EstadoTurno.CONFIRMADO);
+        turnoRepository.save(turnoConfirmado);
+    }
+
+    public List<TurnoDTO> verTurnosDisponibles(){
+        List<Turno> turnos = turnoRepository.findAll();
+        List<TurnoDTO> turnosDto = new ArrayList<>();
+
+        for(Turno t: turnos){
+            if(t.getEstado() == EstadoTurno.DISPONIBLE){
+                TurnoDTO turnoDto = turnoMapper.toDto(t);
+                turnosDto.add(turnoDto);
+            }
+        }
+
+        return turnosDto;
+    }
+
+    public List<TurnoDTO> verTurnosOcupados(){
+        List<Turno> turnos = turnoRepository.findAll();
+        List<TurnoDTO> turnosDto = new ArrayList<>();
+
+        for(Turno t: turnos){
+            if(t.getEstado() == EstadoTurno.RESERVADO || t.getEstado() == EstadoTurno.CONFIRMADO){
+                TurnoDTO turnoDto = turnoMapper.toDto(t);
+                turnosDto.add(turnoDto);
+            }
+        }
+
+        return turnosDto;
     }
 
     //Genera los turnos del mes siguiente al actual solo si no existen turnos ya creados.
@@ -143,9 +181,15 @@ public class TurnoService implements ITurno{
         }
     }
 
-    private boolean diaLaborable(LocalDate fecha){
+    private boolean diaLaborable(@NonNull LocalDate fecha){
         DayOfWeek dia = fecha.getDayOfWeek();
         return dia != DayOfWeek.SATURDAY && dia != DayOfWeek.SUNDAY;
     }
+
+    private Turno obtenerTurnoPorId(@NotNull Integer id){
+        return turnoRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "El turno no fue encontrado"));
+    }
+
 
 }
