@@ -42,13 +42,13 @@ public class NotificacionMapper {
 
         if(notificacionDTO.getPersonaId() != null){
             Persona p = new Persona();
-            p.setId(notificacionDTO.getId());
+            p.setId(notificacionDTO.getPersonaId());
             notificacion.setPersona(p);
         }
 
         if(notificacionDTO.getTurnoId() != null){
             Turno t = new Turno();
-            t.setId(notificacionDTO.getId());
+            t.setId(notificacionDTO.getTurnoId());
             notificacion.setTurno(t);
         }
 
