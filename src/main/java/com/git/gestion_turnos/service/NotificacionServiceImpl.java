@@ -7,6 +7,7 @@ import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.TipoNotificacion;
 import com.git.gestion_turnos.mapper.NotificacionMapper;
 import com.git.gestion_turnos.repository.NotificacionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class NotificacionServiceImpl implements INotificacion{
     }
 
     @Override
+    @Transactional
     public NotificacionDTO crearRecordatorio24h(Persona persona, Turno turno) {
         Notificacion not = new Notificacion();
         not.setPersona(persona);
@@ -42,6 +44,7 @@ public class NotificacionServiceImpl implements INotificacion{
     }
 
     @Override
+    @Transactional
     public void marcarComoEnviada(Integer notificacionId) {
         Notificacion notif = notificacionRepository.findById(notificacionId)
                 .orElseThrow(() -> new RuntimeException("Notificacion no encontrada"));
@@ -50,6 +53,7 @@ public class NotificacionServiceImpl implements INotificacion{
     }
 
     @Override
+    @Transactional
     public void marcarComoRespondida(Integer notificacionId) {
         Notificacion notif = notificacionRepository.findById(notificacionId)
                 .orElseThrow(() -> new RuntimeException("Notificacion no encontrada"));
@@ -59,6 +63,7 @@ public class NotificacionServiceImpl implements INotificacion{
     }
 
     @Override
+    @Transactional
     public List<NotificacionDTO> findByPersona(Integer personaId) {
         List<NotificacionDTO> resultado = new ArrayList<>();
         List<Notificacion> lista = notificacionRepository.findByPersonaId(personaId);
@@ -71,6 +76,7 @@ public class NotificacionServiceImpl implements INotificacion{
     }
 
     @Override
+    @Transactional
     public NotificacionDTO findById(Integer id) {
         Notificacion not = notificacionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Notificacion no encontrada"));
