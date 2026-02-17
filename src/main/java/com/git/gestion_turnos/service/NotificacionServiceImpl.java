@@ -29,7 +29,7 @@ public class NotificacionServiceImpl implements INotificacion{
         Notificacion not = new Notificacion();
         not.setPersona(persona);
         not.setTurno(turno);
-        not.setMensaje("Su turno en la fecha: " + turno.getFecha() + "Es dentro de 24 horas " +
+        not.setMensaje("Su turno en la fecha: " + turno.getFecha() + " es dentro de 24 horas " +
                         "\n para confimar responda SI, para cancelar responda NO.");
         not.setRespondida(false);
         not.setEnviada(false);
