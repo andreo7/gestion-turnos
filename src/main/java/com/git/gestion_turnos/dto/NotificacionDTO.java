@@ -7,17 +7,19 @@ import java.time.LocalDateTime;
 
 public class NotificacionDTO {
     private Integer id;
-    private Persona persona;
+    //El texto que vas a mostrar o mandar
     private String mensaje;
+    //Cuándo se generó la notificación.
     private LocalDateTime fechaCreacion;
     private boolean enviada;
     private boolean respondida;
 
     private TipoNotificacion tipo;
 
-    private int personaId;
-    private int turnoId;
+    private Integer personaId;
+    private Integer turnoId;
 
+    private LocalDateTime fechaRespuesta;
     public NotificacionDTO() {
     }
 
@@ -27,14 +29,6 @@ public class NotificacionDTO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
     }
 
     public String getMensaje() {
@@ -69,7 +63,7 @@ public class NotificacionDTO {
         this.tipo = tipo;
     }
 
-    public int getPersonaId() {
+    public Integer getPersonaId() {
         return personaId;
     }
 
@@ -77,7 +71,7 @@ public class NotificacionDTO {
         this.personaId = personaId;
     }
 
-    public int getTurnoId() {
+    public Integer getTurnoId() {
         return turnoId;
     }
 
@@ -91,5 +85,13 @@ public class NotificacionDTO {
 
     public void setRespondida(boolean respondida) {
         this.respondida = respondida;
+    }
+
+    public LocalDateTime getFechaRespuesta() {
+        return fechaRespuesta;
+    }
+
+    public void setFechaRespuesta(LocalDateTime fechaRespuesta) {
+        this.fechaRespuesta = fechaRespuesta;
     }
 }
