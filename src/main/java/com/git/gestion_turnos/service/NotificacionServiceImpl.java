@@ -7,7 +7,7 @@ import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.TipoNotificacion;
 import com.git.gestion_turnos.mapper.NotificacionMapper;
 import com.git.gestion_turnos.repository.NotificacionRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
