@@ -14,16 +14,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.YearMonth;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TurnoService implements ITurno{
     private final TurnoRepository turnoRepository;
+    private final IHistorialTurno historialTurno;
     private final IPersona personaService;
     private final TurnoMapper turnoMapper;
     private static final LocalTime HORA_INICIO = LocalTime.of(8, 0);
@@ -31,10 +29,11 @@ public class TurnoService implements ITurno{
     private static final int DURACION_TURNO = 30;
 
     //Inyecto los componentes que TurnoService necesita para funcionar.
-    public TurnoService(TurnoRepository turnoRepository, IPersona personaService, TurnoMapper turnoMapper){
+    public TurnoService(TurnoRepository turnoRepository, IPersona personaService, TurnoMapper turnoMapper, IHistorialTurno historialTurno){
         this.turnoRepository = turnoRepository;
         this.personaService = personaService;
         this.turnoMapper = turnoMapper;
+        this.historialTurno = historialTurno;
     }
 
     public List<TurnoDTO> findAll(){
@@ -73,22 +72,25 @@ public class TurnoService implements ITurno{
         }
 
         turno.setPersona(persona);
+        historialTurno.registrarCambioEstado(turno, EstadoTurno.RESERVADO);
         turno.setEstado(EstadoTurno.RESERVADO);
         turnoRepository.save(turno);
 
         return turnoMapper.toDto(turno);
     }
 
+    @Transactional
     public TurnoDTO cancelarTurno(Integer id){
         Turno turno = obtenerTurnoPorId(id);
 
-        if(turno.getEstado() != EstadoTurno.RESERVADO || turno.getEstado() != EstadoTurno.CONFIRMADO){
+        if(turno.getEstado() != EstadoTurno.RESERVADO && turno.getEstado() != EstadoTurno.CONFIRMADO){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible cancelar el turno debido a que esta DISPONIBLE");
         }
         if(turno.getPersona() == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible cancelar el turno debido a que no tiene un cliente al cual cancelar");
         }
 
+        historialTurno.registrarCambioEstado(turno, EstadoTurno.CANCELADO);
         turno.setPersona(null);
         turno.setEstado(EstadoTurno.DISPONIBLE);
         turnoRepository.save(turno);
@@ -96,6 +98,7 @@ public class TurnoService implements ITurno{
         return turnoMapper.toDto(turno);
     }
 
+    @Transactional
     public void confirmarTurno(Turno turno){
         Turno turnoConfirmado = obtenerTurnoPorId(turno.getId());
 
@@ -106,6 +109,7 @@ public class TurnoService implements ITurno{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible confirmar el turno si no tiene una persona asociada");
         }
 
+        historialTurno.registrarCambioEstado(turno, EstadoTurno.CONFIRMADO);
         turnoConfirmado.setEstado(EstadoTurno.CONFIRMADO);
         turnoRepository.save(turnoConfirmado);
     }
