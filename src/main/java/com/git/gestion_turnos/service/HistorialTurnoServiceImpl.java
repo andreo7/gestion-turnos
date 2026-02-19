@@ -33,10 +33,17 @@ public class HistorialTurnoServiceImpl implements IHistorialTurno{
         historialTurnoRepository.save(historialTurno);
     }
 
-
     public Integer countByPersonaIdAndEstadoTurnoActual(@NotNull Integer personaId, EstadoTurno estadoTurno){
         return historialTurnoRepository.countByPersonaIdAndEstadoTurnoActual(personaId, estadoTurno);
     }
+
+    @Override
+    public Page<HistorialDetalleDTO> listarHistorialDePersona(@NotNull Integer personaId, EstadoTurno estadoTurno, Pageable pageable){
+        Page<HistorialTurno> page = historialTurnoRepository.findByPersonaIdAndEstadoTurnoActual(personaId, EstadoTurno.CANCELADO, pageable);
+
+        return page.map(historialTurnoMapper:: toDetalleDto);
+    }
+
 
     private HistorialTurno setAtributos(@NotNull Turno turno){
         HistorialTurno historialTurno = new HistorialTurno();
