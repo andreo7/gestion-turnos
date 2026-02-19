@@ -13,11 +13,9 @@ import java.time.LocalDateTime;
 @Service
 public class HistorialTurnoServiceImpl implements IHistorialTurno{
     private final HistorialTurnoRepository historialTurnoRepository;
-    private final IPersona iPersona;
 
     public HistorialTurnoServiceImpl(HistorialTurnoRepository historialTurnoRepository, IPersona iPersona){
         this.historialTurnoRepository = historialTurnoRepository;
-        this.iPersona = iPersona;
     }
 
     //Registra los cambios de estado en el historial al reservar, confirmar o cancelar un turno.
@@ -30,8 +28,8 @@ public class HistorialTurnoServiceImpl implements IHistorialTurno{
     }
 
 
-    public Integer countByPersonaIdAndEstadoTurno(@NotNull Integer personaId, EstadoTurno estadoTurno){
-        return historialTurnoRepository.countByPersonaIdAndEstadoTurno(personaId, estadoTurno);
+    public Integer countByPersonaIdAndEstadoTurnoActual(@NotNull Integer personaId, EstadoTurno estadoTurno){
+        return historialTurnoRepository.countByPersonaIdAndEstadoTurnoActual(personaId, estadoTurno);
     }
 
     private HistorialTurno setAtributos(@NotNull Turno turno){
