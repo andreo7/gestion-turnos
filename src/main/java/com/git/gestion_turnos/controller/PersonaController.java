@@ -2,6 +2,7 @@ package com.git.gestion_turnos.controller;
 
 import java.util.List;
 
+import com.git.gestion_turnos.dto.PersonaDetalleDTO;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +31,7 @@ public class PersonaController {
     //GET
     //http:localhost:8080/personas/1
     @GetMapping("/{id}")
-    public PersonaDTO findById(@PathVariable Integer id){
+    public PersonaDetalleDTO findById(@PathVariable Integer id){
         return iPersona.findById(id);
     }
 
