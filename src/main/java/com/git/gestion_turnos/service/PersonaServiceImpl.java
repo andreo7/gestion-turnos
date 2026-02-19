@@ -3,8 +3,13 @@ package com.git.gestion_turnos.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.git.gestion_turnos.dto.PersonaDetalleDTO;
+import com.git.gestion_turnos.enums.EstadoTurno;
 import com.git.gestion_turnos.mapper.PersonaMapper;
 import org.jspecify.annotations.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.git.gestion_turnos.dto.PersonaDTO;
@@ -18,10 +23,15 @@ public class PersonaServiceImpl implements IPersona{
 
     private PersonaMapper personaMapper;
 
+    private IHistorialTurno historialTurno;
+
     //Se inyecta por constructor el bean que el service necesita para funcionar.
-    public PersonaServiceImpl(PersonaRepository personaRepository, PersonaMapper personaMapper){
+    public PersonaServiceImpl(PersonaRepository personaRepository,
+                              PersonaMapper personaMapper,
+                              IHistorialTurno historialTurno){
         this.personaRepository = personaRepository;
         this.personaMapper = personaMapper;
+        this.historialTurno = historialTurno;
     }
 
     @Override
@@ -33,25 +43,18 @@ public class PersonaServiceImpl implements IPersona{
     }
 
     @Override
-    public List<PersonaDTO> findAll() {
-        List<Persona> personas = personaRepository.findAll();
-        List<PersonaDTO> dtos = new ArrayList<>();
-
-        for(Persona p : personas){
-            PersonaDTO pdto = personaMapper.toDTO(p);
-            dtos.add(pdto);
-        }
-
-        return dtos;
+    public Page<PersonaDTO> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Persona> pagePersona = personaRepository.findAll(pageable);
+        return pagePersona.map(personaMapper ::toDTO);
     }
 
     @Override
-    public PersonaDTO findById(Integer id) {
+    public PersonaDetalleDTO findById(Integer id) {
         Persona persona = personaRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
 
-        PersonaDTO personaDTO = personaMapper.toDTO(persona);
-        return personaDTO;
+        return  obtenerDetalle(persona.getId());
     }
 
     public Persona findByNombreAndApellidoAndTelefono(String nombre,String apellido, String telefono){
@@ -97,6 +100,24 @@ public class PersonaServiceImpl implements IPersona{
         }
 
         return persona;
+    }
+
+    @Override
+    public PersonaDetalleDTO obtenerDetalle(Integer id) {
+        Persona persona = personaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+        int confirmaciones = historialTurno.countByPersonaIdAndEstadoTurnoActual(id, EstadoTurno.CONFIRMADO);
+        int cancelaciones = historialTurno.countByPersonaIdAndEstadoTurnoActual(id, EstadoTurno.CANCELADO);
+
+        PersonaDetalleDTO personaDet = new PersonaDetalleDTO();
+        personaDet.setId(persona.getId());
+        personaDet.setApellido(persona.getApellido());
+        personaDet.setNombre(persona.getNombre());
+        personaDet.setTelefono(persona.getTelefono());
+        personaDet.setConfirmaciones(confirmaciones);
+        personaDet.setCancelaciones(cancelaciones);
+
+        return personaDet;
     }
 
 }
