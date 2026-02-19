@@ -2,10 +2,13 @@ package com.git.gestion_turnos.service;
 
 import java.util.List;
 
+import com.git.gestion_turnos.dto.HistorialDetalleDTO;
 import com.git.gestion_turnos.dto.PersonaDTO;
 import com.git.gestion_turnos.dto.PersonaDetalleDTO;
 import com.git.gestion_turnos.entity.Persona;
+import com.git.gestion_turnos.enums.EstadoTurno;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface IPersona {
     PersonaDTO save(PersonaDTO personaDTO);
@@ -17,4 +20,5 @@ public interface IPersona {
     Persona getById(Integer id);
     Persona obtenerPersonaOCrear(PersonaDTO personaDto);
     PersonaDetalleDTO obtenerDetalle(Integer id);
+    Page<HistorialDetalleDTO> listarHistorialDePersona(Integer personaId, EstadoTurno estadoTurno, Pageable pageable);
 }

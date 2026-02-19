@@ -3,7 +3,11 @@ package com.git.gestion_turnos.dto;
 import com.git.gestion_turnos.enums.EstadoTurno;
 
 
-//Clase usada para devolver la informacion de turnos cancelados, confirmados o ambos de una persona.
+/**
+ * DTO utilizado en el endpoint:
+ * GET /personas/{id}/historial
+ * Representa los registros de historial asociados a una persona, tanto cancelados como confirmados.
+ */
 public class HistorialDetalleDTO {
     private Integer id;
     private TurnoDTO turno;

@@ -39,7 +39,7 @@ public class HistorialTurnoServiceImpl implements IHistorialTurno{
 
     @Override
     public Page<HistorialDetalleDTO> listarHistorialDePersona(@NotNull Integer personaId, EstadoTurno estadoTurno, Pageable pageable){
-        Page<HistorialTurno> page = historialTurnoRepository.findByPersonaIdAndEstadoTurnoActual(personaId, EstadoTurno.CANCELADO, pageable);
+        Page<HistorialTurno> page = historialTurnoRepository.findByPersonaIdAndEstadoTurnoActual(personaId, estadoTurno, pageable);
 
         return page.map(historialTurnoMapper:: toDetalleDto);
     }

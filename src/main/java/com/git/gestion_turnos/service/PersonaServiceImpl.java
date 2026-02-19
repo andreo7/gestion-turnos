@@ -1,29 +1,30 @@
 package com.git.gestion_turnos.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.git.gestion_turnos.dto.HistorialDetalleDTO;
 import com.git.gestion_turnos.dto.PersonaDetalleDTO;
 import com.git.gestion_turnos.enums.EstadoTurno;
 import com.git.gestion_turnos.mapper.PersonaMapper;
+import jakarta.validation.constraints.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.git.gestion_turnos.dto.PersonaDTO;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.repository.PersonaRepository;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class PersonaServiceImpl implements IPersona{
 
-    private PersonaRepository personaRepository;
+    private final PersonaRepository personaRepository;
 
-    private PersonaMapper personaMapper;
+    private final PersonaMapper personaMapper;
 
-    private IHistorialTurno historialTurno;
+    private final IHistorialTurno historialTurno;
 
     //Se inyecta por constructor el bean que el service necesita para funcionar.
     public PersonaServiceImpl(PersonaRepository personaRepository,
@@ -100,6 +101,12 @@ public class PersonaServiceImpl implements IPersona{
         }
 
         return persona;
+    }
+
+    public Page<HistorialDetalleDTO> listarHistorialDePersona(@NotNull Integer personaId, EstadoTurno estadoTurno, Pageable pageable){
+        personaRepository.findById(personaId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Persona inexistente"));
+
+        return historialTurno.listarHistorialDePersona(personaId, estadoTurno, pageable);
     }
 
     @Override
