@@ -5,5 +5,5 @@ import com.git.gestion_turnos.enums.EstadoTurno;
 
 public interface IHistorialTurno {
     void registrarCambioEstado(Turno turno, EstadoTurno estadoTurno);
-    Integer countByPersonaIdAndEstadoTurno(Integer personaId, EstadoTurno estadoTurno);
+    Integer countByPersonaIdAndEstadoTurnoActual(Integer personaId, EstadoTurno estadoTurno);
 }
