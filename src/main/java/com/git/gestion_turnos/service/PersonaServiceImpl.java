@@ -96,4 +96,17 @@ public class PersonaServiceImpl implements IPersona{
         return persona;
     }
 
+    @Override
+    public int obtenerConfirmaciones(Integer id) {
+        Persona persona = personaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+    }
+
+    @Override
+    public int obtenerCancelaciones(Integer id) {
+        Persona persona = personaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+    }
+
+
 }
