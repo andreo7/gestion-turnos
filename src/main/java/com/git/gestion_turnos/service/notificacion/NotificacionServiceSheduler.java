@@ -23,6 +23,8 @@ public class NotificacionServiceSheduler {
         this.notificacionRepository = notificacionRepository;
     }
 
+    //Scheduled para mandar mensaje a las personas que le falten entre 24 y 23 horas
+    //y no se les haya mandado ya el recordatorio.
     @Scheduled(fixedRate = 60000) // cada 1 minuto
     @Transactional
     public void enviarRecordatorios() {
