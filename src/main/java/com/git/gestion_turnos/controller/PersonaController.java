@@ -2,10 +2,14 @@ package com.git.gestion_turnos.controller;
 
 import java.util.List;
 
+import com.git.gestion_turnos.dto.HistorialDetalleDTO;
 import com.git.gestion_turnos.dto.PersonaDetalleDTO;
+import com.git.gestion_turnos.enums.EstadoTurno;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import com.git.gestion_turnos.dto.PersonaDTO;
@@ -55,5 +59,13 @@ public class PersonaController {
     public PersonaDTO update(@PathVariable Integer id,
                              @Valid @RequestBody PersonaDTO persona){
         return iPersona.update(id,persona);
-    }    
+    }
+
+    @GetMapping("/{id}/historial")
+    public Page<HistorialDetalleDTO> listarHistorialDePersona(@PathVariable Integer id,
+                                                              @RequestParam(required = false) EstadoTurno estadoTurno,
+                                                              @PageableDefault(size = 10, page = 0, sort = "fechaHoraActualizacion", direction = Sort.Direction.DESC)
+                                                                  Pageable pageable){
+        return iPersona.listarHistorialDePersona(id, estadoTurno, pageable);
+    }
 }
