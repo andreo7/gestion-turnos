@@ -1,6 +1,6 @@
 package com.git.gestion_turnos.mapper;
 
-import com.git.gestion_turnos.dto.NotificacionDTO;
+import com.git.gestion_turnos.dto.notificacion.NotificacionDTO;
 import com.git.gestion_turnos.entity.Notificacion;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.entity.Turno;

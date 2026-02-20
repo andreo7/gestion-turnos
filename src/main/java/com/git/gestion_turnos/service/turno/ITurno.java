@@ -1,8 +1,8 @@
-package com.git.gestion_turnos.service;
+package com.git.gestion_turnos.service.turno;
 
-import com.git.gestion_turnos.dto.PersonaDTO;
+import com.git.gestion_turnos.dto.persona.PersonaDTO;
 import com.git.gestion_turnos.entity.Turno;
-import com.git.gestion_turnos.dto.TurnoDTO;
+import com.git.gestion_turnos.dto.turno.TurnoDTO;
 
 import java.util.List;
 

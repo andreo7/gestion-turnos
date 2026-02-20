@@ -1,8 +1,4 @@
-package com.git.gestion_turnos.dto;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+package com.git.gestion_turnos.dto.persona;
 
 public class PersonaDetalleDTO {
     private Integer id;

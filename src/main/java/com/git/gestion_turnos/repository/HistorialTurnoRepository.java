@@ -1,6 +1,5 @@
 package com.git.gestion_turnos.repository;
 
-import com.git.gestion_turnos.dto.HistorialDetalleDTO;
 import com.git.gestion_turnos.entity.HistorialTurno;
 import com.git.gestion_turnos.enums.EstadoTurno;
 import jakarta.validation.constraints.NotNull;

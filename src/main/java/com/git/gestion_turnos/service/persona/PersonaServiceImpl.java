@@ -1,9 +1,10 @@
-package com.git.gestion_turnos.service;
+package com.git.gestion_turnos.service.persona;
 
-import com.git.gestion_turnos.dto.HistorialDetalleDTO;
-import com.git.gestion_turnos.dto.PersonaDetalleDTO;
+import com.git.gestion_turnos.dto.historial_turno.HistorialDetalleDTO;
+import com.git.gestion_turnos.dto.persona.PersonaDetalleDTO;
 import com.git.gestion_turnos.enums.EstadoTurno;
 import com.git.gestion_turnos.mapper.PersonaMapper;
+import com.git.gestion_turnos.service.historial_turno.IHistorialTurno;
 import jakarta.validation.constraints.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
@@ -12,13 +13,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.git.gestion_turnos.dto.PersonaDTO;
+import com.git.gestion_turnos.dto.persona.PersonaDTO;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.repository.PersonaRepository;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class PersonaServiceImpl implements IPersona{
+public class PersonaServiceImpl implements IPersona {
 
     private final PersonaRepository personaRepository;
 

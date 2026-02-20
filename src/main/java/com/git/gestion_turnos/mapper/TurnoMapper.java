@@ -1,7 +1,7 @@
 package com.git.gestion_turnos.mapper;
 
-import com.git.gestion_turnos.dto.PersonaDTO;
-import com.git.gestion_turnos.dto.TurnoDTO;
+import com.git.gestion_turnos.dto.persona.PersonaDTO;
+import com.git.gestion_turnos.dto.turno.TurnoDTO;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.entity.Turno;
 import org.springframework.stereotype.Component;

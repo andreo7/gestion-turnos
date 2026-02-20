@@ -1,10 +1,8 @@
-package com.git.gestion_turnos.service;
+package com.git.gestion_turnos.service.persona;
 
-import java.util.List;
-
-import com.git.gestion_turnos.dto.HistorialDetalleDTO;
-import com.git.gestion_turnos.dto.PersonaDTO;
-import com.git.gestion_turnos.dto.PersonaDetalleDTO;
+import com.git.gestion_turnos.dto.historial_turno.HistorialDetalleDTO;
+import com.git.gestion_turnos.dto.persona.PersonaDTO;
+import com.git.gestion_turnos.dto.persona.PersonaDetalleDTO;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.enums.EstadoTurno;
 import org.springframework.data.domain.Page;

@@ -1,12 +1,14 @@
-package com.git.gestion_turnos.service;
+package com.git.gestion_turnos.service.turno;
 
-import com.git.gestion_turnos.dto.PersonaDTO;
-import com.git.gestion_turnos.dto.TurnoDTO;
+import com.git.gestion_turnos.dto.persona.PersonaDTO;
+import com.git.gestion_turnos.dto.turno.TurnoDTO;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.EstadoTurno;
 import com.git.gestion_turnos.mapper.TurnoMapper;
 import com.git.gestion_turnos.repository.TurnoRepository;
+import com.git.gestion_turnos.service.historial_turno.IHistorialTurno;
+import com.git.gestion_turnos.service.persona.IPersona;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.constraints.NotNull;
 import org.jspecify.annotations.NonNull;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TurnoService implements ITurno{
+public class TurnoService implements ITurno {
     private final TurnoRepository turnoRepository;
     private final IHistorialTurno historialTurno;
     private final IPersona personaService;

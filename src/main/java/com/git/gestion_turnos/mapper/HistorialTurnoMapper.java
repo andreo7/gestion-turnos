@@ -1,8 +1,8 @@
 package com.git.gestion_turnos.mapper;
 
-import com.git.gestion_turnos.dto.HistorialDetalleDTO;
-import com.git.gestion_turnos.dto.HistorialTurnoDTO;
-import com.git.gestion_turnos.dto.TurnoDTO;
+import com.git.gestion_turnos.dto.historial_turno.HistorialDetalleDTO;
+import com.git.gestion_turnos.dto.historial_turno.HistorialTurnoDTO;
+import com.git.gestion_turnos.dto.turno.TurnoDTO;
 import com.git.gestion_turnos.entity.HistorialTurno;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.entity.Turno;

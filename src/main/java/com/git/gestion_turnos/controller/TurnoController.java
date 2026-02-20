@@ -1,8 +1,8 @@
 package com.git.gestion_turnos.controller;
 
-import com.git.gestion_turnos.dto.PersonaDTO;
-import com.git.gestion_turnos.dto.TurnoDTO;
-import com.git.gestion_turnos.service.ITurno;
+import com.git.gestion_turnos.dto.persona.PersonaDTO;
+import com.git.gestion_turnos.dto.turno.TurnoDTO;
+import com.git.gestion_turnos.service.turno.ITurno;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

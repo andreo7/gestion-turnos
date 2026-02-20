@@ -1,9 +1,7 @@
 package com.git.gestion_turnos.controller;
 
-import java.util.List;
-
-import com.git.gestion_turnos.dto.HistorialDetalleDTO;
-import com.git.gestion_turnos.dto.PersonaDetalleDTO;
+import com.git.gestion_turnos.dto.historial_turno.HistorialDetalleDTO;
+import com.git.gestion_turnos.dto.persona.PersonaDetalleDTO;
 import com.git.gestion_turnos.enums.EstadoTurno;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -12,8 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import com.git.gestion_turnos.dto.PersonaDTO;
-import com.git.gestion_turnos.service.IPersona;
+import com.git.gestion_turnos.dto.persona.PersonaDTO;
+import com.git.gestion_turnos.service.persona.IPersona;
 
 @RestController
 @RequestMapping("/personas")

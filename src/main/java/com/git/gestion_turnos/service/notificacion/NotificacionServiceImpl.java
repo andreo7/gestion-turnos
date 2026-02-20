@@ -1,6 +1,6 @@
-package com.git.gestion_turnos.service;
+package com.git.gestion_turnos.service.notificacion;
 
-import com.git.gestion_turnos.dto.NotificacionDTO;
+import com.git.gestion_turnos.dto.notificacion.NotificacionDTO;
 import com.git.gestion_turnos.entity.Notificacion;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.entity.Turno;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class NotificacionServiceImpl implements INotificacion{
+public class NotificacionServiceImpl implements INotificacion {
 
     private NotificacionRepository notificacionRepository;
     private NotificacionMapper notificacionMapper;

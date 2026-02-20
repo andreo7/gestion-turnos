@@ -1,6 +1,6 @@
-package com.git.gestion_turnos.service;
+package com.git.gestion_turnos.service.historial_turno;
 
-import com.git.gestion_turnos.dto.HistorialDetalleDTO;
+import com.git.gestion_turnos.dto.historial_turno.HistorialDetalleDTO;
 import com.git.gestion_turnos.entity.HistorialTurno;
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.EstadoTurno;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class HistorialTurnoServiceImpl implements IHistorialTurno{
+public class HistorialTurnoServiceImpl implements IHistorialTurno {
     private final HistorialTurnoRepository historialTurnoRepository;
     private final HistorialTurnoMapper historialTurnoMapper;
 

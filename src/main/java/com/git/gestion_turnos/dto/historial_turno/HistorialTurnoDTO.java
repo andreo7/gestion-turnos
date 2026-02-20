@@ -1,4 +1,4 @@
-package com.git.gestion_turnos.dto;
+package com.git.gestion_turnos.dto.historial_turno;
 
 import com.git.gestion_turnos.enums.EstadoTurno;
 

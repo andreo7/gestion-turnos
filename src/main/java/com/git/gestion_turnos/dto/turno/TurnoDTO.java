@@ -1,8 +1,7 @@
-package com.git.gestion_turnos.dto;
+package com.git.gestion_turnos.dto.turno;
 
+import com.git.gestion_turnos.dto.persona.PersonaDTO;
 import com.git.gestion_turnos.enums.EstadoTurno;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -1,4 +1,4 @@
-package com.git.gestion_turnos.service;
+package com.git.gestion_turnos.service.notificacion;
 
 import com.git.gestion_turnos.entity.Notificacion;
 import com.git.gestion_turnos.repository.NotificacionRepository;

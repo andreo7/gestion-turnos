@@ -1,4 +1,4 @@
-package com.git.gestion_turnos.dto;
+package com.git.gestion_turnos.dto.persona;
 
 
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,5 @@
-package com.git.gestion_turnos.dto;
+package com.git.gestion_turnos.dto.notificacion;
 
-import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.enums.TipoNotificacion;
 
 import java.time.LocalDateTime;
