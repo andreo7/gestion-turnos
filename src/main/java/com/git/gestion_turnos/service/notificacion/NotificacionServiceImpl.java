@@ -63,7 +63,6 @@ public class NotificacionServiceImpl implements INotificacion {
     }
 
     @Override
-    @Transactional
     public List<NotificacionDTO> findByPersona(Integer personaId) {
         List<NotificacionDTO> resultado = new ArrayList<>();
         List<Notificacion> lista = notificacionRepository.findByPersonaId(personaId);
@@ -76,7 +75,6 @@ public class NotificacionServiceImpl implements INotificacion {
     }
 
     @Override
-    @Transactional
     public NotificacionDTO findById(Integer id) {
         Notificacion not = notificacionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Notificacion no encontrada"));
