@@ -16,9 +16,11 @@ import org.springframework.stereotype.Service;
 import com.git.gestion_turnos.dto.persona.PersonaDTO;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.repository.PersonaRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional
 public class PersonaServiceImpl implements IPersona {
 
     private final PersonaRepository personaRepository;
@@ -45,13 +47,17 @@ public class PersonaServiceImpl implements IPersona {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<PersonaDTO> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
         Page<Persona> pagePersona = personaRepository.findAll(pageable);
+        //Este metodo sirve para mapear todas las personas de pagePersona a personaDTO creando asi
+        //una page<PersonaDTO> nueva que es devuelta al instante
         return pagePersona.map(personaMapper ::toDTO);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PersonaDetalleDTO findById(Integer id) {
         Persona persona = personaRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
@@ -59,13 +65,12 @@ public class PersonaServiceImpl implements IPersona {
         return  obtenerDetalle(persona.getId());
     }
 
-    public Persona findByNombreAndApellidoAndTelefono(String nombre,String apellido, String telefono){
-        return personaRepository.findByNombreAndApellidoAndTelefono(nombre, apellido, telefono);
-    }
+    @Override
+    @Transactional(readOnly = true)
+    public Page<HistorialDetalleDTO> listarHistorialDePersona(@NotNull Integer personaId, EstadoTurno estadoTurno, Pageable pageable){
+        personaRepository.findById(personaId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Persona inexistente"));
 
-    public Persona getById(Integer id){
-        return personaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+        return historialTurno.listarHistorialDePersona(personaId, estadoTurno, pageable);
     }
 
     @Override
@@ -89,7 +94,22 @@ public class PersonaServiceImpl implements IPersona {
         return response;
     }
 
+    //Este metodo es un metodo auxiliar parar obtenerPersonaOCrear
+    @Override
+    @Transactional(readOnly = true)
+    public Persona findByNombreAndApellidoAndTelefono(String nombre,String apellido, String telefono){
+        return personaRepository.findByNombreAndApellidoAndTelefono(nombre, apellido, telefono);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Persona getById(Integer id){
+        return personaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+    }
+
     //Ve si la persona existe por sus atributos, si no es asi, crea una nueva persona
+    @Override
     public Persona obtenerPersonaOCrear(@NonNull PersonaDTO personaDto){
         Persona personaExistente = findByNombreAndApellidoAndTelefono(personaDto.getNombre(), personaDto.getApellido(), personaDto.getTelefono());
 
@@ -104,13 +124,13 @@ public class PersonaServiceImpl implements IPersona {
         return persona;
     }
 
-    public Page<HistorialDetalleDTO> listarHistorialDePersona(@NotNull Integer personaId, EstadoTurno estadoTurno, Pageable pageable){
-        personaRepository.findById(personaId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Persona inexistente"));
 
-        return historialTurno.listarHistorialDePersona(personaId, estadoTurno, pageable);
-    }
 
+    //Metodo que busca todos los detalles de una persona en relacion con los turnos realizados
+    //es un metodo auxiliar que usamos en findById por si en algun momento queremos agregar algo
+    //al detalle desacoplamos de ese metodo.
     @Override
+    @Transactional(readOnly = true)
     public PersonaDetalleDTO obtenerDetalle(Integer id) {
         Persona persona = personaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
