@@ -144,7 +144,6 @@ public class TurnoService implements ITurno {
         return turnosDto;
     }
 
-    //Genera los turnos del mes siguiente al actual solo si no existen turnos ya creados.
     @Transactional
     public void generarTurnosMesSiguiente(){
         LocalDate hoy = LocalDate.now();
@@ -186,6 +185,10 @@ public class TurnoService implements ITurno {
             hora = hora.plusMinutes(DURACION_TURNO);
         }
     }
+
+    /**
+     * METODOS AUXILIARES.
+     */
 
     private boolean diaLaborable(@NonNull LocalDate fecha){
         DayOfWeek dia = fecha.getDayOfWeek();
