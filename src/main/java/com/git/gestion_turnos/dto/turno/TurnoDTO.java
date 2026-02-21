@@ -6,6 +6,12 @@ import com.git.gestion_turnos.enums.EstadoTurno;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * DTO de salida para la entidad Turno.
+ * Representa la información básica de un turno que se expone
+ * en las respuestas de la API (listados y consultas).
+ */
+
 public class TurnoDTO {
     private Integer id;
     private LocalDate fecha;
