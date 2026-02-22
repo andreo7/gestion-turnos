@@ -134,8 +134,8 @@ public class PersonaServiceImpl implements IPersona {
     public PersonaDetalleDTO obtenerDetalle(Integer id) {
         Persona persona = personaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
-        int confirmaciones = historialTurno.countByPersonaIdAndEstadoTurnoActual(id, EstadoTurno.CONFIRMADO);
-        int cancelaciones = historialTurno.countByPersonaIdAndEstadoTurnoActual(id, EstadoTurno.CANCELADO);
+        int confirmaciones = historialTurno.contarTurnosPorPersonaYEstado(id, EstadoTurno.CONFIRMADO);
+        int cancelaciones = historialTurno.contarTurnosPorPersonaYEstado(id, EstadoTurno.CANCELADO);
 
         PersonaDetalleDTO personaDet = new PersonaDetalleDTO();
         personaDet.setId(persona.getId());

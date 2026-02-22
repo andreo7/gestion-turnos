@@ -4,6 +4,10 @@ import com.git.gestion_turnos.enums.EstadoTurno;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO predeterminado para la entidad HistorialTurno.
+ * Aun sin uso.
+ */
 public class HistorialTurnoDTO {
     private Integer id;
     private Integer personaId;
