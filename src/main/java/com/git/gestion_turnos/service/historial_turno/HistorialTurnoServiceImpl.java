@@ -24,7 +24,6 @@ public class HistorialTurnoServiceImpl implements IHistorialTurno {
         this.historialTurnoMapper = historialTurnoMapper;
     }
 
-    //Registra los cambios de estado en el historial al reservar, confirmar o cancelar un turno.
     @Transactional
     public void registrarCambioEstado(@NotNull Turno turno, EstadoTurno estadoTurno){
         HistorialTurno historialTurno = setAtributos(turno);
@@ -33,7 +32,7 @@ public class HistorialTurnoServiceImpl implements IHistorialTurno {
         historialTurnoRepository.save(historialTurno);
     }
 
-    public Integer countByPersonaIdAndEstadoTurnoActual(@NotNull Integer personaId, EstadoTurno estadoTurno){
+    public Integer contarTurnosPorPersonaYEstado(@NotNull Integer personaId, EstadoTurno estadoTurno){
         return historialTurnoRepository.countByPersonaIdAndEstadoTurnoActual(personaId, estadoTurno);
     }
 
@@ -44,7 +43,7 @@ public class HistorialTurnoServiceImpl implements IHistorialTurno {
         return page.map(historialTurnoMapper:: toDetalleDto);
     }
 
-
+    //METODO AUXILIAR para setear los atributos de un objeto HistorialTurno
     private HistorialTurno setAtributos(@NotNull Turno turno){
         HistorialTurno historialTurno = new HistorialTurno();
         historialTurno.setTurno(turno);
