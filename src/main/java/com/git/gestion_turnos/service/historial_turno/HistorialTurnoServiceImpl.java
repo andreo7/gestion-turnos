@@ -32,7 +32,7 @@ public class HistorialTurnoServiceImpl implements IHistorialTurno {
         historialTurnoRepository.save(historialTurno);
     }
 
-    public Integer countByPersonaIdAndEstadoTurnoActual(@NotNull Integer personaId, EstadoTurno estadoTurno){
+    public Integer contarTurnosPorPersonaYEstado(@NotNull Integer personaId, EstadoTurno estadoTurno){
         return historialTurnoRepository.countByPersonaIdAndEstadoTurnoActual(personaId, estadoTurno);
     }
 

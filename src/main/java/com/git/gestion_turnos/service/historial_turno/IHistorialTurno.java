@@ -21,7 +21,7 @@ public interface IHistorialTurno {
      * @param estadoTurno estado del turno que se quiere consultar
      * @return numero de turnos de una persona con estadoTurno = ?.
      */
-    Integer countByPersonaIdAndEstadoTurnoActual(Integer personaId, EstadoTurno estadoTurno);
+    Integer contarTurnosPorPersonaYEstado(Integer personaId, EstadoTurno estadoTurno);
 
     /**
      * Lista los turnos históricos de una persona, permitiendo filtrar por estado.
