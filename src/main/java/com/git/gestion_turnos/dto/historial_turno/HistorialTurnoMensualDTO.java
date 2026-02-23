@@ -2,8 +2,10 @@ package com.git.gestion_turnos.dto.historial_turno;
 
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-
+/**
+ * DTO utilizado para consultar metricas
+ * (cancelaciones, confirmaciones, turnos totales, porcentaje de asistencia)
+ */
 @Component
 public class HistorialTurnoMensualDTO {
     Integer total;
