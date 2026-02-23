@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.YearMonth;
 
 @Service
@@ -48,15 +49,11 @@ public class HistorialTurnoServiceImpl implements IHistorialTurno {
     }
 
     @Transactional
-    public HistorialTurnoMensualDTO totalTurnosMensualesConEstado(LocalDate fechaInicio, LocalDate fechaFin){
+    public HistorialTurnoMensualDTO totalTurnosMensualesConEstado(int anio, int mes){
         HistorialTurnoMensualDTO historialTurnoMensual = new HistorialTurnoMensualDTO();
 
-        YearMonth fecha = YearMonth.of(fechaInicio.getYear(), fechaInicio.getMonth());
-        fechaInicio = fecha.atDay(1);
-        fechaFin = fecha.atEndOfMonth();
-
-        Integer cancelaciones = historialTurnoRepository.totalTurnosMensualesConEstado(EstadoTurno.CANCELADO, fechaInicio, fechaFin);
-        Integer confirmaciones = historialTurnoRepository.totalTurnosMensualesConEstado(EstadoTurno.CONFIRMADO, fechaInicio, fechaFin);
+        Integer cancelaciones = historialTurnoRepository.totalTurnosMensualesConEstado(EstadoTurno.CANCELADO, anio, mes);
+        Integer confirmaciones = historialTurnoRepository.totalTurnosMensualesConEstado(EstadoTurno.CONFIRMADO, anio, mes);
         Integer total = cancelaciones + confirmaciones;
         double porcentajeAsistencia = calcularPorcentaje(total, confirmaciones);
 

@@ -20,8 +20,8 @@ public class HistorialTurnoController {
     }
 
     @GetMapping()
-    public HistorialTurnoMensualDTO totalTurnosMensualesConEstado(@RequestParam LocalDate fechaInicio,
-                                                                  @RequestParam LocalDate fechaFin){
-        return iHistorialTurno.totalTurnosMensualesConEstado(fechaInicio, fechaFin);
+    public HistorialTurnoMensualDTO totalTurnosMensualesConEstado(@RequestParam int anio,
+                                                                  @RequestParam int mes){
+        return iHistorialTurno.totalTurnosMensualesConEstado(anio, mes);
     }
 }

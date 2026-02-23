@@ -19,10 +19,10 @@ public interface HistorialTurnoRepository extends JpaRepository<HistorialTurno, 
         SELECT COUNT(DISTINCT t.id)
         FROM HistorialTurno h
         JOIN h.turno t
-        WHERE t.fecha BETWEEN :fechaInicio AND :fechaFin
+        WHERE YEAR(t.fecha) = :anio AND MONTH(t.fecha) = :mes
         AND h.estadoTurnoActual = :estadoTurno
      """)
      Integer totalTurnosMensualesConEstado(@Param("estadoTurno") EstadoTurno estadoTurno,
-                                      @Param("fechaInicio") LocalDate fechaInicio,
-                                      @Param("fechaFin") LocalDate fechaFin);
+                                      @Param("anio") int anio,
+                                      @Param("mes") int mes);
 }

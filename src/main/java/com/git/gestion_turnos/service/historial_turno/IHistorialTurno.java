@@ -35,6 +35,10 @@ public interface IHistorialTurno {
      */
     Page<HistorialDetalleDTO> listarHistorialDePersona(@NotNull Integer personaId, EstadoTurno estadoTurno, Pageable pageable);
 
-
-    HistorialTurnoMensualDTO totalTurnosMensualesConEstado(LocalDate fechaInicio, LocalDate fechaFin);
+    /**
+     * Consulta la cantidad total de turnos, cancelaciones, confirmaciones y porcentaje de asistencias en un mes dado.
+     * @param anio año sobre el cual se aplicara la consulta.
+     * @param mes mes sobre el cual se aplicara la consulta.
+     */
+    HistorialTurnoMensualDTO totalTurnosMensualesConEstado(int anio, int mes);
 }
