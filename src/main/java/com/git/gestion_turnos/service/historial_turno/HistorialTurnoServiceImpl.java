@@ -50,7 +50,7 @@ public class HistorialTurnoServiceImpl implements IHistorialTurno {
 
         Integer cancelaciones = historialTurnoRepository.totalTurnosMensualesConEstado(EstadoTurno.CANCELADO, anio, mes);
         Integer confirmaciones = historialTurnoRepository.totalTurnosMensualesConEstado(EstadoTurno.CONFIRMADO, anio, mes);
-        Integer total = cancelaciones + confirmaciones;
+        Integer total = cancelaciones + confirmaciones; //No se tienen en cuenta los turnos en estado RESERVADO ya que no es un estado final.
         double porcentajeAsistencia = calcularPorcentaje(total, confirmaciones);
 
         historialTurnoMensual.setTotal(total);
