@@ -1,6 +1,7 @@
 package com.git.gestion_turnos.service.historial_turno;
 
 import com.git.gestion_turnos.dto.historial_turno.HistorialDetalleDTO;
+import com.git.gestion_turnos.dto.historial_turno.HistorialTurnoMensualDTO;
 import com.git.gestion_turnos.entity.HistorialTurno;
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.EstadoTurno;
@@ -43,7 +44,33 @@ public class HistorialTurnoServiceImpl implements IHistorialTurno {
         return page.map(historialTurnoMapper:: toDetalleDto);
     }
 
-    //METODO AUXILIAR para setear los atributos de un objeto HistorialTurno
+    @Transactional
+    public HistorialTurnoMensualDTO totalTurnosMensualesConEstado(int anio, int mes){
+        HistorialTurnoMensualDTO historialTurnoMensual = new HistorialTurnoMensualDTO();
+
+        Integer cancelaciones = historialTurnoRepository.totalTurnosMensualesConEstado(EstadoTurno.CANCELADO, anio, mes);
+        Integer confirmaciones = historialTurnoRepository.totalTurnosMensualesConEstado(EstadoTurno.CONFIRMADO, anio, mes);
+        Integer total = cancelaciones + confirmaciones; //No se tienen en cuenta los turnos en estado RESERVADO ya que no es un estado final.
+        double porcentajeAsistencia = calcularPorcentaje(total, confirmaciones);
+
+        historialTurnoMensual.setTotal(total);
+        historialTurnoMensual.setCancelados(cancelaciones);
+        historialTurnoMensual.setConfirmados(confirmaciones);
+        historialTurnoMensual.setPorcentajeAsistencia(porcentajeAsistencia);
+
+        return historialTurnoMensual;
+    }
+
+    //METODO AUXILIAR PARA CALCULAR EL PORCENTAJE DE ASISTENCIA EN UN MES.
+    private double calcularPorcentaje(Integer totalMensual, Integer confirmados) {
+        if(totalMensual == 0){
+            return 0.0;
+        }
+
+        return (confirmados * 100.0) / totalMensual;
+    }
+
+    //METODO AUXILIAR para setear los atributos de un objeto HistorialTurno.
     private HistorialTurno setAtributos(@NotNull Turno turno){
         HistorialTurno historialTurno = new HistorialTurno();
         historialTurno.setTurno(turno);

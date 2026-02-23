@@ -1,11 +1,13 @@
 package com.git.gestion_turnos.service.historial_turno;
 
 import com.git.gestion_turnos.dto.historial_turno.HistorialDetalleDTO;
+import com.git.gestion_turnos.dto.historial_turno.HistorialTurnoMensualDTO;
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.EstadoTurno;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 
 public interface IHistorialTurno {
     /**
@@ -31,4 +33,11 @@ public interface IHistorialTurno {
      * @return página de resultados con el detalle del historial.
      */
     Page<HistorialDetalleDTO> listarHistorialDePersona(@NotNull Integer personaId, EstadoTurno estadoTurno, Pageable pageable);
+
+    /**
+     * Consulta la cantidad total de turnos, cancelaciones, confirmaciones y porcentaje de asistencias en un mes dado.
+     * @param anio año sobre el cual se aplicara la consulta.
+     * @param mes mes sobre el cual se aplicara la consulta.
+     */
+    HistorialTurnoMensualDTO totalTurnosMensualesConEstado(int anio, int mes);
 }
