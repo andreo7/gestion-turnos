@@ -5,6 +5,7 @@ import com.git.gestion_turnos.dto.turno.TurnoDTO;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.EstadoTurno;
+import com.git.gestion_turnos.exception.TurnoNotFoundException;
 import com.git.gestion_turnos.mapper.TurnoMapper;
 import com.git.gestion_turnos.repository.TurnoRepository;
 import com.git.gestion_turnos.service.historial_turno.IHistorialTurno;
@@ -197,7 +198,7 @@ public class TurnoService implements ITurno {
 
     private Turno obtenerTurnoPorId(@NotNull Integer id){
         return turnoRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "El turno no fue encontrado"));
+                new TurnoNotFoundException(id));
     }
 
 

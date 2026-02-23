@@ -87,6 +87,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(TurnoNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTurnoNotFound(TurnoNotFoundException ex,
+                                                             WebRequest request){
+        log.warn("❌ Turno no encontrado: {}", ex.getMessage());
+
+        return new ResponseEntity<>(new ErrorResponse(LocalDateTime.now(),
+                404,
+                "Not found",
+                ex.getMessage(),
+                ex.getErrorCode(),
+                request.getContextPath()), HttpStatus.NOT_FOUND);
+    }
+
     //METODO AUXILIAR PARA NO REPETIR CODIGOS EN LOS HANDLER
     private Map<String, Object> buildErrorBody(
             int status,
