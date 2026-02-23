@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(NotificacionNotFoundException.class)
-    public ResponseEntity<Object> handleNotificacionNotFound(NotificacionNotFoundException ex,
+    public ResponseEntity<ErrorResponse> handleNotificacionNotFound(NotificacionNotFoundException ex,
                                                              WebRequest request) {
         log.warn("❌ Notificación no encontrada: {}", ex.getMessage(), ex);
 
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
 
     // Maneja PersonaNotFoundException
     @ExceptionHandler(PersonaNotFoundException.class)
-    public ResponseEntity<Object> handlePersonaNotFound(PersonaNotFoundException ex,
+    public ResponseEntity<ErrorResponse> handlePersonaNotFound(PersonaNotFoundException ex,
                                                         WebRequest request){
         log.warn("❌ Persona no encontrada: {}", ex.getMessage(), ex);
 
@@ -49,7 +49,6 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 ex.getErrorCode(),
                 request.getDescription(false).replace("uri=", "")), HttpStatus.NOT_FOUND);
-
     }
 
     @ExceptionHandler(TurnoNotFoundException.class)
