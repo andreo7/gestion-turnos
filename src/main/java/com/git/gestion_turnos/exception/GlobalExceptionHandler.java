@@ -2,7 +2,7 @@ package com.git.gestion_turnos.exception;
 
 import com.git.gestion_turnos.exception.notificacion.NotificacionNotFoundException;
 import com.git.gestion_turnos.exception.persona.PersonaNotFoundException;
-import com.git.gestion_turnos.exception.turno.TurnoNotFoundException;
+import com.git.gestion_turnos.exception.turno.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -26,6 +26,21 @@ public class GlobalExceptionHandler {
     //Logger para debuggear usando warns
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ErrorResponse> handleBaseException(BaseException ex,
+                                                             WebRequest request){
+        log.warn("❌ Error: {}", ex.getMessage(), ex);
+
+        return new ResponseEntity<>(new ErrorResponse(LocalDateTime.now(),
+                ex.getHttpStatus().value(),
+                ex.getHttpStatus().name(),
+                ex.getMessage(),
+                ex.getErrorCode(),
+                request.getDescription(false).replace("uri=", "")), ex.getHttpStatus());
+    }
+
+    /**
     @ExceptionHandler(NotificacionNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotificacionNotFound(NotificacionNotFoundException ex,
                                                              WebRequest request) {
@@ -39,39 +54,8 @@ public class GlobalExceptionHandler {
                 request.getDescription(false).replace("uri=", "")), HttpStatus.NOT_FOUND);
 
     }
+    */
 
-    // Maneja PersonaNotFoundException
-    @ExceptionHandler(PersonaNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handlePersonaNotFound(PersonaNotFoundException ex,
-                                                        WebRequest request){
-        log.warn("❌ Persona no encontrada: {}", ex.getMessage(), ex);
-
-        return new ResponseEntity<>(new ErrorResponse(LocalDateTime.now(),
-                404,
-                "Not found",
-                ex.getMessage(),
-                ex.getErrorCode(),
-                request.getDescription(false).replace("uri=", "")), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(TurnoNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleTurnoNotFound(TurnoNotFoundException ex,
-                                                             WebRequest request){
-        //El ultimo parametro imprime el STACK TRACE.
-        log.warn("❌ Turno no encontrado: {}", ex.getMessage(), ex);
-
-        return new ResponseEntity<>(new ErrorResponse(LocalDateTime.now(),
-                404,
-                "Not found",
-                ex.getMessage(),
-                ex.getErrorCode(),
-                request.getDescription(false).replace("uri=", "")), HttpStatus.NOT_FOUND);
-    }
-
-    /**
-     * Maneja CUALQUIER otra excepción no prevista
-     * Este es el "catch-all" (atrapa todo)
-     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGenericException(
             Exception ex,
