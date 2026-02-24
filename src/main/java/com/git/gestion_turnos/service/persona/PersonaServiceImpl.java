@@ -3,7 +3,7 @@ package com.git.gestion_turnos.service.persona;
 import com.git.gestion_turnos.dto.historial_turno.HistorialDetalleDTO;
 import com.git.gestion_turnos.dto.persona.PersonaDetalleDTO;
 import com.git.gestion_turnos.enums.EstadoTurno;
-import com.git.gestion_turnos.exception.PersonaNotFoundException;
+import com.git.gestion_turnos.exception.persona.PersonaNotFoundException;
 import com.git.gestion_turnos.mapper.PersonaMapper;
 import com.git.gestion_turnos.service.historial_turno.IHistorialTurno;
 import jakarta.validation.constraints.NotNull;
