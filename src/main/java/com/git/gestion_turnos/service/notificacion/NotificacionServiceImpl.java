@@ -5,7 +5,7 @@ import com.git.gestion_turnos.entity.Notificacion;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.TipoNotificacion;
-import com.git.gestion_turnos.exception.NotificacionNotFoundException;
+import com.git.gestion_turnos.exception.notificacion.NotificacionNotFoundException;
 import com.git.gestion_turnos.mapper.NotificacionMapper;
 import com.git.gestion_turnos.repository.NotificacionRepository;
 import org.slf4j.Logger;
