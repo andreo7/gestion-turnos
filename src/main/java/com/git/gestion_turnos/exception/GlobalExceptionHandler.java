@@ -2,7 +2,7 @@ package com.git.gestion_turnos.exception;
 
 import com.git.gestion_turnos.exception.notificacion.NotificacionNotFoundException;
 import com.git.gestion_turnos.exception.persona.PersonaNotFoundException;
-import com.git.gestion_turnos.exception.turno.TurnoNotFoundException;
+import com.git.gestion_turnos.exception.turno.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
