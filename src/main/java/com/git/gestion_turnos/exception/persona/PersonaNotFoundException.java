@@ -1,4 +1,6 @@
-package com.git.gestion_turnos.exception;
+package com.git.gestion_turnos.exception.persona;
+
+import com.git.gestion_turnos.exception.BaseException;
 
 public class PersonaNotFoundException extends BaseException {
     public PersonaNotFoundException(Integer id) {

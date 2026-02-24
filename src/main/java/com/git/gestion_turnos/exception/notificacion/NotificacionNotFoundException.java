@@ -1,4 +1,6 @@
-package com.git.gestion_turnos.exception;
+package com.git.gestion_turnos.exception.notificacion;
+
+import com.git.gestion_turnos.exception.BaseException;
 
 public class NotificacionNotFoundException extends BaseException {
     public NotificacionNotFoundException(Integer id) {
