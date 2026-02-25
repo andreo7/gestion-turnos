@@ -21,7 +21,7 @@ public class Turno {
     @Enumerated(EnumType.STRING)
     private EstadoTurno estado;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) //No trae a la persona hasta que se necesita
     @JoinColumn(name = "persona_id")
     private Persona persona;
 

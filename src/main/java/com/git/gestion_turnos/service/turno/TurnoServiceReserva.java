@@ -5,10 +5,7 @@ import com.git.gestion_turnos.dto.turno.TurnoDTO;
 import com.git.gestion_turnos.entity.Persona;
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.EstadoTurno;
-import com.git.gestion_turnos.exception.turno.TurnoClienteNullException;
-import com.git.gestion_turnos.exception.turno.TurnoDisponibleException;
-import com.git.gestion_turnos.exception.turno.TurnoNoDisponibleException;
-import com.git.gestion_turnos.exception.turno.TurnoNotFoundException;
+import com.git.gestion_turnos.exception.turno.*;
 import com.git.gestion_turnos.mapper.TurnoMapper;
 import com.git.gestion_turnos.repository.TurnoRepository;
 import com.git.gestion_turnos.service.historial_turno.IHistorialTurno;
@@ -16,9 +13,7 @@ import com.git.gestion_turnos.service.persona.IPersona;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 import org.jspecify.annotations.NonNull;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.*;
 
@@ -86,10 +81,10 @@ public class TurnoServiceReserva implements ITurnoReserva {
         Turno turno = obtenerTurnoPorId(id);
 
         if(turno.getEstado() != EstadoTurno.RESERVADO){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible confirmar un turno no reservado");
+            throw new TurnoNoReservadoException(turno.getId());
         }
         if(turno.getPersona() == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible confirmar el turno si no tiene una persona asociada");
+            throw new TurnoClienteNullException(turno.getId());
         }
 
         historialTurno.registrarCambioEstado(turno, EstadoTurno.CONFIRMADO);

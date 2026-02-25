@@ -2,12 +2,11 @@ package com.git.gestion_turnos.service.turno;
 
 import com.git.gestion_turnos.entity.Turno;
 import com.git.gestion_turnos.enums.EstadoTurno;
+import com.git.gestion_turnos.exception.turno.TurnosDuplicadosException;
 import com.git.gestion_turnos.repository.TurnoRepository;
 import org.jspecify.annotations.NonNull;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -16,7 +15,7 @@ import java.time.YearMonth;
 
 @Service
 public class TurnoServiceGenerador implements ITurnoGenerador{
-    private TurnoRepository turnoRepository;
+    private final TurnoRepository turnoRepository;
     private static final LocalTime HORA_INICIO = LocalTime.of(8, 0);
     private static final LocalTime HORA_FIN = LocalTime.of(16, 0);
     private static final int DURACION_TURNO = 30;
@@ -31,7 +30,7 @@ public class TurnoServiceGenerador implements ITurnoGenerador{
         LocalDate siguienteMes = hoy.plusMonths(1);
 
         if(!turnoRepository.existenTurnosEnMes(siguienteMes.getYear(), siguienteMes.getMonth().getValue()).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Los turnos para el siguiente mes ya existen");
+            throw new TurnosDuplicadosException(siguienteMes.getYear(), siguienteMes.getMonth().getValue());
         }
 
         crearTurnosEnUnMes(siguienteMes.getYear(), siguienteMes.getMonth().getValue());

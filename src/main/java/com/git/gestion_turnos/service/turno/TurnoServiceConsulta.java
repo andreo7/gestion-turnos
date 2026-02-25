@@ -8,11 +8,13 @@ import com.git.gestion_turnos.mapper.TurnoMapper;
 import com.git.gestion_turnos.repository.TurnoRepository;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class TurnoServiceConsulta implements ITurnoConsulta{
     private TurnoRepository turnoRepository;
     private final TurnoMapper turnoMapper;
