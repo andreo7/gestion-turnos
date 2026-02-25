@@ -24,7 +24,7 @@ public interface ITurnoReserva {
 
     /**
      * CU-003: Confirma el turno con estado RESERVADO.
-     * @param turno a confirmar.
+     * @param id del turno a confirmar.
      */
-    void confirmarTurno(Turno turno);
+    void confirmarTurno(Integer id);
 }

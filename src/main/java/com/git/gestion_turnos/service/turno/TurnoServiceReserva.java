@@ -43,7 +43,7 @@ public class TurnoServiceReserva implements ITurnoReserva {
         Turno turno = obtenerTurnoPorId(idTurno);
 
         if(turno.getEstado() != EstadoTurno.DISPONIBLE){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El turno no esta disponible para reservar");
+            throw new TurnoNoDisponibleException(turno.getId());
         }
 
         Persona persona;
@@ -67,10 +67,10 @@ public class TurnoServiceReserva implements ITurnoReserva {
         Turno turno = obtenerTurnoPorId(id);
 
         if(turno.getEstado() != EstadoTurno.RESERVADO && turno.getEstado() != EstadoTurno.CONFIRMADO){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible cancelar el turno debido a que esta DISPONIBLE");
+            throw new TurnoDisponibleException(turno.getId());
         }
         if(turno.getPersona() == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible cancelar el turno debido a que no tiene un cliente al cual cancelar");
+            throw new TurnoClienteNullException(turno.getId());
         }
 
         historialTurno.registrarCambioEstado(turno, EstadoTurno.CANCELADO);
@@ -82,19 +82,19 @@ public class TurnoServiceReserva implements ITurnoReserva {
     }
 
     @Transactional
-    public void confirmarTurno(Turno turno){
-        Turno turnoConfirmado = obtenerTurnoPorId(turno.getId());
+    public void confirmarTurno(Integer id){
+        Turno turno = obtenerTurnoPorId(id);
 
         if(turno.getEstado() != EstadoTurno.RESERVADO){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible confirmar un turno no reservado");
         }
-        if(turno.getPersona() != null){
+        if(turno.getPersona() == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No es posible confirmar el turno si no tiene una persona asociada");
         }
 
         historialTurno.registrarCambioEstado(turno, EstadoTurno.CONFIRMADO);
-        turnoConfirmado.setEstado(EstadoTurno.CONFIRMADO);
-        turnoRepository.save(turnoConfirmado);
+        turno.setEstado(EstadoTurno.CONFIRMADO);
+        turnoRepository.save(turno);
     }
 
     //METODO AUXILIAR PARA EVITAR REPETIR CODIGO.
