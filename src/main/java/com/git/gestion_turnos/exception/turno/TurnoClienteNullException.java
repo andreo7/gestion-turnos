@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 public class TurnoClienteNullException extends BaseException {
     public TurnoClienteNullException(Integer id) {
         super(String.format("El turno con ID %d no tiene un cliente asociado"),
-                "TURNO-003",
+                "TURNO_003",
                 HttpStatus.BAD_REQUEST);
     }
 }

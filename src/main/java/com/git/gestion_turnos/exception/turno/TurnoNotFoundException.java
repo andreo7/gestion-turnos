@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 public class TurnoNotFoundException extends BaseException {
     public TurnoNotFoundException(Integer id) {
         super(String.format("Turno con ID %d no encontrado", id),
-                "TURNO-001",
+                "TURNO_001",
                 HttpStatus.NOT_FOUND);
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 public class TurnosDuplicadosException extends BaseException {
     public TurnosDuplicadosException(int anio, int mes) {
         super("Los turnos para el año " + mes + " / " + anio + " ya existen",
-                "TURNO-005",
+                "TURNO_005",
                 HttpStatus.CONFLICT);
     }
 }
