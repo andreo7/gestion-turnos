@@ -8,7 +8,7 @@ import java.time.LocalTime;
 
 @Entity
 @Table(uniqueConstraints = {
-        @UniqueConstraint(name = "uk_fecha",
+        @UniqueConstraint(name = "uk_fecha_hora",
                           columnNames = {"fecha", "hora"}
         )
 })
@@ -21,7 +21,7 @@ public class Turno {
     @Enumerated(EnumType.STRING)
     private EstadoTurno estado;
 
-    @ManyToOne(fetch = FetchType.LAZY) //No trae a la persona hasta que se necesita
+    @ManyToOne
     @JoinColumn(name = "persona_id")
     private Persona persona;
 
