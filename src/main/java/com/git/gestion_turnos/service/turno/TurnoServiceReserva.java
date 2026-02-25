@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.*;
 
 @Service
+@Transactional
 public class TurnoServiceReserva implements ITurnoReserva {
     private final TurnoRepository turnoRepository;
     private final IHistorialTurno historialTurno;
@@ -32,8 +33,7 @@ public class TurnoServiceReserva implements ITurnoReserva {
         this.historialTurno = historialTurno;
     }
 
-    //Asigna a un turno un cliente existenete. En el caso de que el cliente no exista se crea y guarda en la BD.
-    @Transactional
+
     public TurnoDTO reservarTurno(Integer idTurno, @NonNull PersonaDTO personaDto){
         Turno turno = obtenerTurnoPorId(idTurno);
 
@@ -42,7 +42,8 @@ public class TurnoServiceReserva implements ITurnoReserva {
         }
 
         Persona persona;
-        //Veo si en el body de la request me llega el id de la persona
+
+        //Si el id de la persona me llega en la request lo devuelve.
         if(personaDto.getId() != null){
             persona = personaService.getById(personaDto.getId());
         }else{
@@ -57,7 +58,6 @@ public class TurnoServiceReserva implements ITurnoReserva {
         return turnoMapper.toDto(turno);
     }
 
-    @Transactional
     public TurnoDTO cancelarTurno(Integer id){
         Turno turno = obtenerTurnoPorId(id);
 
@@ -76,7 +76,6 @@ public class TurnoServiceReserva implements ITurnoReserva {
         return turnoMapper.toDto(turno);
     }
 
-    @Transactional
     public void confirmarTurno(Integer id){
         Turno turno = obtenerTurnoPorId(id);
 
