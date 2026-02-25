@@ -8,8 +8,8 @@ import java.time.LocalTime;
 
 @Entity
 @Table(uniqueConstraints = {
-        @UniqueConstraint(name = "uk_fecha",
-                          columnNames = {"fecha, hora"}
+        @UniqueConstraint(name = "uk_fecha_hora",
+                          columnNames = {"fecha", "hora"}
         )
 })
 public class Turno {
