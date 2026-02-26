@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TurnoServiceSheduler {
-    private final TurnoService turnoService;
+    private final ITurnoGenerador iTurnoGenerador;
     private static final Logger log = LoggerFactory.getLogger(TurnoServiceSheduler.class);
 
-    public TurnoServiceSheduler(TurnoService turnoService){
-        this.turnoService = turnoService;
+    public TurnoServiceSheduler(ITurnoGenerador iTurnoGenerador){
+        this.iTurnoGenerador = iTurnoGenerador;
     }
 
     @Scheduled(cron = "0 0 * 15 * ?")
@@ -20,7 +20,7 @@ public class TurnoServiceSheduler {
         log.info("🔔 Iniciando generacion de turnos para el siguiente mes");
 
         try {
-            turnoService.generarTurnosMesSiguiente();
+            iTurnoGenerador.generarTurnosMesSiguiente();
             log.info("✅ Turnos generados correctamente");
         }catch (Exception e){
             log.error("Error al generar los turnos", e);

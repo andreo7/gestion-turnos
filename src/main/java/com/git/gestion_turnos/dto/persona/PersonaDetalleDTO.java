@@ -1,5 +1,6 @@
 package com.git.gestion_turnos.dto.persona;
 
+//DTO usado en el endpoint personas/id -> findById para devolver los datos del cliente junto a sus confirmaciones y cancelaciones.
 public class PersonaDetalleDTO {
     private Integer id;
 

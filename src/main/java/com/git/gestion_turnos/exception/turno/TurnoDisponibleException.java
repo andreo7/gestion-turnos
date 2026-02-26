@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 public class TurnoDisponibleException extends BaseException {
     public TurnoDisponibleException(Integer id) {
         super(String.format("No es posible cancelar el turno con ID %d ya que esta DISPONIBLE"),
-                "TURNO-002",
+                "TURNO_002",
                 HttpStatus.BAD_REQUEST);
     }
 }
