@@ -89,11 +89,11 @@ public class NotificacionEnviadorService {
                 notificacion.getTurno().getId());
 
         try {
-            // Delega el envío al servicio de WhatsApp
-            //whatsAppService.enviarMensaje(
-            //        notificacion.getPersona().getTelefono(),
-            //        notificacion.getMensaje()
-            // );
+            //Delega el envío al servicio de WhatsApp
+            whatsAppService.enviarMensaje(
+                   notificacion.getPersona().getTelefono(),
+                    notificacion.getMensaje()
+            );
 
             // Actualiza el estado
             notificacion.setEnviada(true);
