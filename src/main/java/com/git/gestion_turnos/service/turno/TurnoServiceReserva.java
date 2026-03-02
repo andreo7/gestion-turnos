@@ -9,6 +9,7 @@ import com.git.gestion_turnos.exception.turno.*;
 import com.git.gestion_turnos.mapper.TurnoMapper;
 import com.git.gestion_turnos.repository.TurnoRepository;
 import com.git.gestion_turnos.service.historial_turno.IHistorialTurno;
+import com.git.gestion_turnos.service.notificacion.INotificacion;
 import com.git.gestion_turnos.service.persona.IPersona;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +25,15 @@ public class TurnoServiceReserva implements ITurnoReserva {
     private final IHistorialTurno historialTurno;
     private final IPersona personaService;
     private final TurnoMapper turnoMapper;
+    private final INotificacion notificacionService;
 
     //Inyecto los componentes que TurnoService necesita para funcionar.
-    public TurnoServiceReserva(TurnoRepository turnoRepository, IPersona personaService, TurnoMapper turnoMapper, IHistorialTurno historialTurno){
+    public TurnoServiceReserva(TurnoRepository turnoRepository, IPersona personaService, TurnoMapper turnoMapper, IHistorialTurno historialTurno, INotificacion notificacionService){
         this.turnoRepository = turnoRepository;
         this.personaService = personaService;
         this.turnoMapper = turnoMapper;
         this.historialTurno = historialTurno;
+        this.notificacionService = notificacionService;
     }
 
 
@@ -51,6 +54,7 @@ public class TurnoServiceReserva implements ITurnoReserva {
         }
 
         turno.setPersona(persona);
+        notificacionService.crearRecordatorio24h(persona, turno);
         historialTurno.registrarCambioEstado(turno, EstadoTurno.RESERVADO);
         turno.setEstado(EstadoTurno.RESERVADO);
         turnoRepository.save(turno);
