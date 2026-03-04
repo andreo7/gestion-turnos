@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,11 @@ public class NotificacionServiceImpl implements INotificacion {
 
     private NotificacionRepository notificacionRepository;
     private NotificacionMapper notificacionMapper;
+
+
+    // Formateadores para fechas
+    private static final DateTimeFormatter FECHA_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter HORA_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     private static final Logger log = LoggerFactory.getLogger(NotificacionServiceImpl.class);
 
@@ -40,8 +46,8 @@ public class NotificacionServiceImpl implements INotificacion {
         Notificacion not = new Notificacion();
         not.setPersona(persona);
         not.setTurno(turno);
-        not.setMensaje("Su turno en la fecha: " + turno.getFecha() + " es dentro de 24 horas " +
-                        "\n para confimar responda SI, para cancelar responda NO.");
+        String mensaje = construirMensajeRecordatorio(persona, turno);
+        not.setMensaje(mensaje);
         not.setRespondida(false);
         not.setEnviada(false);
         not.setTipo(TipoNotificacion.RECORDATORIO);
@@ -52,6 +58,29 @@ public class NotificacionServiceImpl implements INotificacion {
         log.info("✅ Recordatorio creado con ID: {}", notguardada.getId());
 
         return notificacionMapper.toDTO(notguardada);
+    }
+
+    /**
+     * Construye el mensaje de recordatorio con formato profesional.
+     */
+    private String construirMensajeRecordatorio(Persona persona, Turno turno) {
+        String nombreCompleto = persona.getNombre() + " " + persona.getApellido();
+        String fecha = turno.getFecha().format(FECHA_FORMATTER);
+        String hora = turno.getHora().format(HORA_FORMATTER);
+
+        return String.format(
+                        "Hola %s! 👋\n\n" +
+                        "Le recordamos que tiene un turno agendado:\n\n" +
+                        "📅 Fecha: %s\n" +
+                        "🕐 Hora: %s\n\n" +
+                        "Por favor confirme su asistencia respondiendo:\n" +
+                        "• SI para confirmar ✅\n" +
+                        "• NO para cancelar ❌\n\n" +
+                        "Esperamos su respuesta antes de las 24hs.",
+                        nombreCompleto,
+                        fecha,
+                        hora
+        );
     }
 
     @Override

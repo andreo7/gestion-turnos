@@ -1,6 +1,7 @@
 package com.git.gestion_turnos.repository;
 
 import com.git.gestion_turnos.entity.Notificacion;
+import com.git.gestion_turnos.enums.TipoNotificacion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -35,4 +36,19 @@ public interface NotificacionRepository extends JpaRepository<Notificacion, Inte
         AND n.fechaCreacion < :fechaLimite
     """)
     int deleteByEnviadaTrueAndFechaCreacionBefore(@Param("fechaLimite") LocalDateTime fechaLimite);
+
+    @Query("""
+    SELECT n FROM Notificacion n
+    JOIN FETCH n.turno t
+    JOIN FETCH n.persona p
+    WHERE n.persona.id = :personaId
+    AND n.enviada = true
+    AND n.respondida = false
+    AND n.tipo = :tipo
+    ORDER BY n.fechaCreacion DESC
+""")
+    List<Notificacion> findByPersonaIdAndEnviadaTrueAndRespondidaFalseAndTipo(
+            @Param("personaId") Integer personaId,
+            @Param("tipo") TipoNotificacion tipo
+    );
 }
