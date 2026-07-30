@@ -21,7 +21,7 @@ export const TurnosPage = () => {
 
   // Handlers
   const handleReservar = (turnoId) => {
-    navigate(/turnos/reservar/${turnoId});
+    navigate(`/turnos/reservar/${turnoId}`);
   };
 
   const handleCancelar = async (turnoId) => {
@@ -36,7 +36,7 @@ export const TurnosPage = () => {
   };
 
   const handleVerCliente = (personaId) => {
-    navigate(/personas/${personaId});
+    navigate(`/personas/${personaId}`);
   };
 
   // Loading state
