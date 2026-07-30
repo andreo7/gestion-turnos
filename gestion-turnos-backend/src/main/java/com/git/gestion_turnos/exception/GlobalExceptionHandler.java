@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -38,6 +39,19 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 ex.getErrorCode(),
                 request.getDescription(false).replace("uri=", "")), ex.getHttpStatus());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
+        Map<String, String> errores = new LinkedHashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(err ->
+                errores.put(err.getField(), err.getDefaultMessage()));
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("status", 400);
+        body.put("error", "Validation Error");
+        body.put("errores", errores);
+        return ResponseEntity.badRequest().body(body);
     }
 
     /**
