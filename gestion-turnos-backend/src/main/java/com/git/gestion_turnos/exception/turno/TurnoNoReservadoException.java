@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 //Excepcion que se lanza al intentar confirmar un turno que no esta reservado.
 public class TurnoNoReservadoException extends BaseException {
     public TurnoNoReservadoException(Integer id) {
-        super(String.format("No es posible confirmar el turno con ID %d debido a que no esta reservado"),
+        super(String.format("No es posible confirmar el turno con ID %d debido a que no esta reservado", id),
                 "TURNO_004",
                 HttpStatus.BAD_REQUEST);
     }
