@@ -80,7 +80,7 @@ public class PersonaServiceImpl implements IPersona {
 
         log.info("✅ Persona encontrada");
 
-        return  obtenerDetalle(persona.getId());
+        return obtenerDetalle(persona.getId());
     }
 
     @Override
