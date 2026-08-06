@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class HistorialTurnoMapper {
     private final TurnoMapper turnoMapper;
 
-    public  HistorialTurnoMapper(TurnoMapper turnoMapper){
+    public HistorialTurnoMapper(TurnoMapper turnoMapper){
         this.turnoMapper = turnoMapper;
     }
 

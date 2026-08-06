@@ -1,4 +1,4 @@
-package com.git.gestion_turnos;
+package com.git.gestion_turnos.service;
 
 import com.git.gestion_turnos.entity.Notificacion;
 import com.git.gestion_turnos.entity.Turno;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
